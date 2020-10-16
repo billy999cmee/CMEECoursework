@@ -1,0 +1,64 @@
+#UNIX Chapter Practical 
+
+#Q1 find . -type f -exec ls -s {} \; | sort -n | head -10
+#find (find files/directories), -type f (regularr file), exec (execute command (in this case it will be list)), ls -s (list, sort by file size)
+#sort -n (sort lines of text files, by comparing their string numerical values)
+#head -10 (show the first n lines of the text file, show 10 lines)
+# {} = exit
+
+
+#Output of command when tested on the sandbox directory
+#0 ./TestFind/Dir1/File1.csv
+#0 ./TestFind/Dir1/File1.tex
+#0 ./TestFind/Dir1/File1.txt
+#0 ./TestFind/Dir2/file2.csv
+#0 ./TestFind/Dir2/File2.tex
+#0 ./TestFind/Dir2/File2.txt
+#0 ./TestFind/Dir3/File3.txt
+#0 ./TestWild/Anotherfile.csv
+#0 ./TestWild/Anotherfile.txt
+
+
+#Q2 
+#Write a file called UnixPrac1.txt 
+
+#touch UnixPrac1.txt
+
+# 1)Count how many lines there are in each file
+
+find ../data -type f -name "*.fasta" | while read FILE; do
+     count=$(grep -c ^ < "$FILE")
+     echo "$FILE has $count lines"
+done                                     #read while loop to count all lines for all subdirectories in fasta, find normal file types ending with fasta, read 
+                                         #the files while counting the number of lines (grep -c) in each file and echo the count lines out
+
+# 2)Print everything starting from the second line for the E. coli genome
+
+tail -n+2 ../data/E.coli.fasta #tail -n2 will only show the last two lines, therefore we need -n+2
+
+# 3)Count the sequence length of this genome
+
+tail -n+2  ../data/E.coli.fasta | tr -d '\n' | wc -m  #count number of characters excluding the first line and removing the newline characters 
+                                                            #(need to read file FIRST!)
+
+# 4)Count the matches of a particular sequence, “ATGC” in the genome of E. coli (hint: Start by removing the first line and removing newline characters)
+
+#sed -i '1d'  remove the first line, -i = edit the file itself, 1d = 1 means the first line and d means delete
+
+tail -n+2 ../data/E.coli.fasta | tr -d '\n' | grep -o 'ATGC' | wc -l 
+
+# 5)Compute the AT/GC ratio
+#calculate the ACTUAL (A+T)/(G+C) ratio, we will be ignoring the Ys and Rs since both of them can be either the numerator or the denominator
+
+echo $(tail -n+2 ../data/E.coli.fasta | tr -d '\n' | grep -o 'A\|T' | wc -l) /\
+$(tail -n+2 ../data/E.coli.fasta | tr -d '\n' | grep -o 'G\|C' | wc -l) | bc -l
+
+#ans = 0.969228, which fits the Chargaff rule
+
+# grep -o 'A\|T' searches for A or T, if grep -o 'A|T' it searches for A followed by | followed by T (use \ to make it OR)
+# bc -l changes the output from fraction to decimal
+# \ used to break line for readability
+
+
+# NOTES
+# First attempt for Q1 : cat *.fasta | wc -l #wc -l This only counts new lines, not the last line if not ended with a new line, so we will use grep -c!
