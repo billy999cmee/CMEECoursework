@@ -19,7 +19,7 @@
 <br> FirstExample.tex: sudo apt-get install texlive-full texlive-fonts-recommended texlive-pictures texlive-latex-extra imagemagick    
 
 **Project structure and Usage:**
-<br> Within this Week1 directory, there are sub-directories including code, data, result and sandbox (testing) as instructed by TheMulQuaBio
+<br> Within this Week1 directory, there are sub-directories including code, data, result and sandbox (testing, gitignored) as instructed by TheMulQuaBio
 
 **Author name and contact**
 <br> Billy Lam
