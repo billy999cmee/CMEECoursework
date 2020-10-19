@@ -1,0 +1,717 @@
+Starting weekly feedback for Yu Ki Billy, Week1
+
+Current Points = 100
+
+Note that: 
+(1) Major sections begin with a double "====" line 
+(2) Subsections begin with a single "====" line 
+(3) Code output or text file content are printed within single "*****" lines 
+
+======================================================================
+======================================================================
+Your Git repo size this week is about 1.56 MiB on disk 
+
+PART 1: Checking project workflow...
+
+Found the following directories in parent directory: .git, Feedback, Week1
+
+Found the following files in parent directory: README.md, .gitignore
+
+Checking for key files in parent directory...
+
+Found .gitignore in parent directory, great! 
+
+Printing contents of .gitignore:
+
+**********************************************************************
+*~ 
+*.tmp
+*.png
+Week1/sandbox/
+
+**********************************************************************
+
+Found README in parent directory, named: README.md
+
+Printing contents of README.md:
+
+**********************************************************************
+**Project name / title:**
+<br> My CMEE Coursework Repository
+
+**Brief description:**
+<br> This is the MRes Computational Methodology in Ecology and Evolution (CMEE) at Imperial College London. This project will include all the practical scripts of each chapter that are required for the completion of this course and will be updated on a weekly basis.
+
+All of the scripts are based on:
+<br> https://mhasoba.github.io/TheMulQuaBio/intro.html
+
+All of the data are obtained from:
+<br> https://github.com/mhasoba/TheMulQuaBio
+
+**Languages:**
+<br> GNU bash, version 5.0.17(1)-release (x86_64-pc-linux-gnu)
+<br> Python3
+<br> R 4.0.2
+
+**Dependencies:**
+<br> Imagemagick
+<br> Latex
+
+**Installation:** 
+<br> For week1  
+
+tiff2png.sh: apt install imagemagick
+<br> FirstExample.tex: sudo apt-get install texlive-full texlive-fonts-recommended texlive-pictures texlive-latex-extra imagemagick           
+
+
+**Project structure and Usage:**
+<br> There is a sub-directory for each week, within each of those sub-directories there is a standard structure of code, data, results and sandbox. The code directory contains all the codes, the data directory contains all the data downloaded for the practicals (see brief description section to obtain the data from the link), results will contain all the results generated from practicals and sandbox is a directory filled with many test files which will not be assessed on and will be git ignored.
+
+**Author name and contact**
+<br> Billy Lam
+<br> ykl17@ic.ac.uk
+**********************************************************************
+
+======================================================================
+Looking for the weekly directories...
+
+Found 1 weekly directories: Week1
+
+The Week1 directory will be assessed 
+
+======================================================================
+======================================================================
+PART 2: Checking weekly code and workflow...
+
+======================================================================
+Assessing WEEK1...
+
+Found the following directories: data, code, results
+
+Found the following files: readme.md
+
+Checking for readme file in weekly directory...
+
+Found README in parent directory, named: readme.md
+
+Printing contents of readme.md:
+
+**********************************************************************
+**Project name / title:**
+<br> Introduction to Computing, Week1!
+
+**Brief description:**
+<br> This is a beginner's course on UNIX, Shell scripting, Documentation via Latex and Version control with Git. A total of 5 chapters has been gone through, within each of these chapters they include basic bash terminal commands such as cd, ls, wc, pdflatex etc.
+
+<br> Chapters can be accessed through this link down below:
+<br> https://mhasoba.github.io/TheMulQuaBio/intro.html
+
+**Languages:**
+<br> GNU bash, version 5.0.17(1)-release (x86_64-pc-linux-gnu)
+
+**Dependencies:**
+<br> Imagemagick
+<br> Latex
+
+**Installation:** 
+<br> tiff2png.sh: apt install imagemagick
+<br> FirstExample.tex: sudo apt-get install texlive-full texlive-fonts-recommended texlive-pictures texlive-latex-extra imagemagick    
+
+**Project structure and Usage:**
+<br> Within this Week1 directory, there are sub-directories including code, data, result and sandbox (testing, gitignored) as instructed by TheMulQuaBio
+
+**Author name and contact**
+<br> Billy Lam
+<br> ykl17@ic.ac.uk
+**********************************************************************
+
+Results directory is empty - good! 
+
+Found 13 code files: ConcatenateTwoFiles.sh, tiff2png.sh, UnixPrac1.txt, variables.sh, CountLines.sh, FirstBiblio.bib, csvtospace.sh, trial.sh, boilerplate.sh, FirstExample.tex, tabtocsv.sh, CompileLatex.sh, MyExampleScript.sh
+
+Found the following extra files: FirstExample.pdf, test.ssv
+0.5 pt deducted per extra file
+
+Current Points = 99.0
+
+======================================================================
+Testing script/code files...
+
+======================================================================
+Inspecting script file ConcatenateTwoFiles.sh...
+
+File contents are:
+
+**********************************************************************
+#!/bin/bash
+## concatenate two files into a new file
+
+## An IF statement to provide an error statement and exit in the absence of 2 input files and a provided filename for $3 
+
+if [ $# -eq 0 ] || [ $# -eq 1 ] || [ $# -eq 2 ]; then  ## $# is the number of positional arguments in the command,
+    echo "You need two input files and the name of an output file on the command line!  Error!!" >&2
+    exit 1
+else
+    echo "There are two input files and the name of an output file given on the command line!  It is $1, $2 and $3 as the name of the output file!"
+    cat $1 > $3 #concatenate and print $1, redirect to $3
+    cat $2 >> $3 #concatenate and print $2, redirect to $3
+    echo "Merged File is"
+    cat $3
+    echo "Moving $3 to data"
+    mv $3 ../data/ # move $3 to the data directory
+fi
+
+
+
+**********************************************************************
+
+Testing ConcatenateTwoFiles.sh...
+
+Output (only first 500 characters): 
+
+
+**********************************************************************
+
+**********************************************************************
+
+Encountered error (or warning):
+You need two input files and the name of an output file on the command line!  Error!!
+
+======================================================================
+Inspecting script file tiff2png.sh...
+
+File contents are:
+
+**********************************************************************
+#!/bin/bash
+
+#convert tiff to png
+
+## An IF statement to provide an error statement and exit if not input file provided
+
+if [ $# -eq 0 ]; then  
+    echo "No input files specified on command line!  Error!!" >&2
+    exit 1
+fi
+
+##Convert all tiff files to png and moving them to the data directory
+
+for f in *.tif; 
+    do  
+        echo "Converting $f"; 
+        convert "$f"  "$(basename "$f" .tif).png"; 
+        mv $f.png ../data/ #move $f.png to the data directory
+    done
+
+
+**********************************************************************
+
+Testing tiff2png.sh...
+
+Output (only first 500 characters): 
+
+
+**********************************************************************
+
+**********************************************************************
+
+Encountered error (or warning):
+No input files specified on command line!  Error!!
+
+======================================================================
+Inspecting script file UnixPrac1.txt...
+
+File contents are:
+
+**********************************************************************
+#UNIX Chapter Practical 
+
+#Q1 find . -type f -exec ls -s {} \; | sort -n | head -10
+#find (find files/directories), -type f (regularr file), exec (execute command (in this case it will be list)), ls -s (list, sort by file size)
+#sort -n (sort lines of text files, by comparing their string numerical values)
+#head -10 (show the first n lines of the text file, show 10 lines)
+# {} = exit
+
+
+#Output of command when tested on the sandbox directory
+#0 ./TestFind/Dir1/File1.csv
+#0 ./TestFind/Dir1/File1.tex
+#0 ./TestFind/Dir1/File1.txt
+#0 ./TestFind/Dir2/file2.csv
+#0 ./TestFind/Dir2/File2.tex
+#0 ./TestFind/Dir2/File2.txt
+#0 ./TestFind/Dir3/File3.txt
+#0 ./TestWild/Anotherfile.csv
+#0 ./TestWild/Anotherfile.txt
+
+
+#Q2 
+#Write a file called UnixPrac1.txt 
+
+#touch UnixPrac1.txt
+
+# 1)Count how many lines there are in each file
+
+find ../data -type f -name "*.fasta" | while read FILE; do
+     count=$(grep -c ^ < "$FILE")
+     echo "$FILE has $count lines"
+done                                     #read while loop to count all lines for all subdirectories in fasta, find normal file types ending with fasta, read 
+                                         #the files while counting the number of lines (grep -c) in each file and echo the count lines out
+
+# 2)Print everything starting from the second line for the E. coli genome
+
+tail -n+2 ../data/E.coli.fasta #tail -n2 will only show the last two lines, therefore we need -n+2
+
+# 3)Count the sequence length of this genome
+
+tail -n+2  ../data/E.coli.fasta | tr -d '\n' | wc -m  #count number of characters excluding the first line and removing the newline characters 
+                                                            #(need to read file FIRST!)
+
+# 4)Count the matches of a particular sequence, “ATGC” in the genome of E. coli (hint: Start by removing the first line and removing newline characters)
+
+#sed -i '1d'  remove the first line, -i = edit the file itself, 1d = 1 means the first line and d means delete
+
+tail -n+2 ../data/E.coli.fasta | tr -d '\n' | grep -o 'ATGC' | wc -l 
+
+# 5)Compute the AT/GC ratio
+#calculate the ACTUAL (A+T)/(G+C) ratio, we will be ignoring the Ys and Rs since both of them can be either the numerator or the denominator
+
+echo $(tail -n+2 ../data/E.coli.fasta | tr -d '\n' | grep -o 'A\|T' | wc -l) /\
+$(tail -n+2 ../data/E.coli.fasta | tr -d '\n' | grep -o 'G\|C' | wc -l) | bc -l
+
+#ans = 0.969228, which fits the Chargaff rule
+
+# grep -o 'A\|T' searches for A or T, if grep -o 'A|T' it searches for A followed by | followed by T (use \ to make it OR)
+# bc -l changes the output from fraction to decimal
+# \ used to break line for readability
+
+
+# NOTES
+# First attempt for Q1 : cat *.fasta | wc -l #wc -l This only counts new lines, not the last line if not ended with a new line, so we will use grep -c!
+**********************************************************************
+
+Testing UnixPrac1.txt...
+
+======================================================================
+Inspecting script file variables.sh...
+
+File contents are:
+
+**********************************************************************
+#!/bin/bash
+
+## Shows the use of variables ##
+
+re='^[0-9]+$' #regex: + means check all inputs! (min of one to infinite times) and $ means end of line
+
+MyVar='2'
+echo 'the current value of the variable is' "$MyVar" 
+echo '3'
+read MyVar
+
+## IF statement to make sure the input can't be empty
+
+# Check if string is empty using -z (True if string is empty)   
+if [ -z "$MyVar" ]; then
+   printf '%s\n' "No input entered"    #%s means take the next arguement and print it as a string
+   exit 1
+fi
+
+## I think an integer will make more sense but putting anything else for MyVar won't stop the script from working!
+
+if ! [[ $MyVar =~ $re ]]; then
+    printf '%s\n' "I think an integer will make more sense but its aight!"
+fi
+
+echo 'the current value of the variable is' "$MyVar"
+
+## Reading multiple values ##
+echo '2 3'
+read a b
+
+## Two IF statements to make sure the inputs can't be empty and must be an integer
+ 
+if [ -z "$a" ] || [ -z "$b" ]; then # || means OR, && means AND
+   printf '%s\n' "No input entered or not enough inputs entered"
+   exit 1
+fi
+
+#check if string is an integer using -n (true if string is not empty)
+if ! [[ $a =~ $re ]] || ! [[ $b =~ $re ]]; then
+    printf '%s\n' "You need to enter numbers!"
+    exit 1
+fi
+
+echo 'you entered' $a 'and' $b '. Their sum is:'
+mysum=`expr $a + $b`
+echo $mysum
+
+
+
+#test.txt, cut -f 1 -d ".", result = test, cut the first .
+
+**********************************************************************
+
+Testing variables.sh...
+
+Output (only first 500 characters): 
+
+
+**********************************************************************
+the current value of the variable is 2
+3
+No input entered
+
+**********************************************************************
+
+Code ran without errors
+
+Time consumed = 0.00523s
+
+======================================================================
+Inspecting script file CountLines.sh...
+
+File contents are:
+
+**********************************************************************
+#!/bin/bash
+
+## An IF statement to give and error statement and exit if no input file is provided
+if [ $# -eq 0 ]; then  ## $# the number of positional arguments in the command
+    echo "No input files specified on command line!  Error!" >&2
+    exit 1
+else
+    echo "There is an input file given on command line,  it is $1 !"
+fi
+
+NumLines=`wc -l < $1`
+echo "The file $1 has $NumLines lines"
+echo
+
+**********************************************************************
+
+Testing CountLines.sh...
+
+Output (only first 500 characters): 
+
+
+**********************************************************************
+
+**********************************************************************
+
+Encountered error (or warning):
+No input files specified on command line!  Error!
+
+======================================================================
+Inspecting script file FirstBiblio.bib...
+
+File contents are:
+
+**********************************************************************
+@article{einstein1905does,
+  title={Does the inertia of a body depend upon its energy-content?},
+  author={Einstein, A.},
+  journal={Annalen der Physik},
+  volume={18},
+  pages={639--641},
+  year={1905}
+}
+**********************************************************************
+
+Testing FirstBiblio.bib...
+
+======================================================================
+Inspecting script file csvtospace.sh...
+
+File contents are:
+
+**********************************************************************
+#!/bin/bash
+
+## IF statement to exit if there isn't an input file
+if [ $# -eq 0 ]; then  
+    echo "No input files specified on command line!  Error!" >&2
+    exit 1
+fi
+
+echo "Creating a space separated values file of $1 ..."
+
+## Hard coding to convert .csv to .ssv, only works if your $1 is ../XX/XX.csv! It will work for all the csv files in the data directory cp from Temperatures
+
+filename=$(echo $1 | rev | cut -f 1 -d '/' | rev | cut -f 1 -d '.') #cut filename so only filename exists, e.g. ../sandbox/test.txt to test
+
+directory=$(echo $1 | cut -f 2 -d '/') #cut till only directory exists, e.g. ../sandbox/test.txt to sandbox
+
+whole="../$directory/$filename" #have the whole directory out
+
+cat $1 | tr -s "," " " >> $whole.ssv
+
+echo "Done!"
+exit
+**********************************************************************
+
+Testing csvtospace.sh...
+
+Output (only first 500 characters): 
+
+
+**********************************************************************
+
+**********************************************************************
+
+Encountered error (or warning):
+No input files specified on command line!  Error!
+
+======================================================================
+Inspecting script file trial.sh...
+
+File contents are:
+
+**********************************************************************
+echo -e "this is a test run"
+
+**********************************************************************
+
+Testing trial.sh...
+
+Output (only first 500 characters): 
+
+
+**********************************************************************
+this is a test run
+
+**********************************************************************
+
+Code ran without errors
+
+Time consumed = 0.00722s
+
+======================================================================
+Inspecting script file boilerplate.sh...
+
+File contents are:
+
+**********************************************************************
+#!/bin/bash
+# Author: Billy Lam yu.lam17@imperial.ac.uk
+# Script: boilerplate.sh
+# Desc: simple boilerplate for shell scripts
+# Arguments: none
+# Date: Oct 2020
+
+echo -e "\nThis is a shell script! \n" #-e enables interpretation of backslash escapes
+
+#exit
+
+#bash myscript.sh
+#chmod +x myscript.sh #x means the permission to run sth, chmod means change permission mode
+# ./myscript.sh  #the ./ is needed
+
+echo "Remove   excess   spaces." | tr -s ""
+
+
+
+**********************************************************************
+
+Testing boilerplate.sh...
+
+Output (only first 500 characters): 
+
+
+**********************************************************************
+
+This is a shell script! 
+
+Remove   excess   spaces.
+
+**********************************************************************
+
+Code ran without errors
+
+Time consumed = 0.00528s
+
+======================================================================
+Inspecting script file FirstExample.tex...
+
+File contents are:
+
+**********************************************************************
+\documentclass[12pt]{article}
+
+\title{A Simple Document}
+
+\author{Your Name}
+
+\date{}
+
+\begin{document}
+  \maketitle
+  
+  \begin{abstract}
+    This paper must be cool!
+  \end{abstract}
+  
+  \section{Introduction}
+    Blah Blah!
+  
+  \section{Materials \& Methods}
+  One of the most famous equations is:
+  \begin{equation}
+    E = mc^2
+  \end{equation}
+  This equation was first proposed by Einstein in 1905 
+  \cite{einstein1905does}.
+  
+  \bibliographystyle{plain}
+  \bibliography{FirstBiblio}
+  
+\end{document}
+**********************************************************************
+
+Testing FirstExample.tex...
+
+======================================================================
+Inspecting script file tabtocsv.sh...
+
+File contents are:
+
+**********************************************************************
+#!/bin/bash
+# Author: Billy Lam yu.lam17@imperial.ac.uk
+# Script: tabtocsv.sh
+# Description: substitute the tabs in the files with commas
+#
+# Saves the output into a .csv file
+# Arguments: 1 -> tab delimited file
+# Date: Oct 2020
+
+## An IF statement to give an error statement and exit if no input files are provided
+
+if [ $# -eq 0 ]; then  ## $# the number of positional arguments in the command
+
+    echo "No input files specified on command line.  Error." >&2
+    exit 1
+else
+    echo "There is an input file given on command line.  It is $1 !"
+fi
+
+echo "Creating a comma delimited version of $1 ..."
+
+cat $1 |tr -s "\t" "," >> $1.csv #tr -s replaces each sequence of a repeated character with a single occurence of that character, replace all tabs with a ,
+
+echo "Moving $1.csv to data directory"
+
+mv $1.csv ../data/
+
+echo "Done!"
+exit
+
+
+
+**********************************************************************
+
+Testing tabtocsv.sh...
+
+Output (only first 500 characters): 
+
+
+**********************************************************************
+
+**********************************************************************
+
+Encountered error (or warning):
+No input files specified on command line.  Error.
+
+======================================================================
+Inspecting script file CompileLatex.sh...
+
+File contents are:
+
+**********************************************************************
+#!/bin/bash
+
+
+# If file is present, create a pdf file, open it and remove other unneccesary files, otherwise print error and exit if no file provided
+if [ ! -z $1 ] ; then
+
+    # Compile latex file and create a pdf file
+        pdflatex $1.tex
+        pdflatex $1.tex
+        bibtex $1
+        pdflatex $1.tex
+        pdflatex $1.tex
+        evince $1.pdf &
+
+    # Cleanup !
+    rm *.aux
+    rm *.log
+    rm *.bbl
+    rm *.blg
+else
+echo "you need a file!"
+exit 1
+fi
+
+
+**********************************************************************
+
+Testing CompileLatex.sh...
+
+Output (only first 500 characters): 
+
+
+**********************************************************************
+you need a file!
+
+**********************************************************************
+
+Code ran without errors
+
+Time consumed = 0.01106s
+
+======================================================================
+Inspecting script file MyExampleScript.sh...
+
+File contents are:
+
+**********************************************************************
+#!/bin/bash
+
+msg1="Hello"
+msg2=$USER
+echo "$msg1 $msg2"
+echo "Hello $USER"
+echo
+
+**********************************************************************
+
+Testing MyExampleScript.sh...
+
+Output (only first 500 characters): 
+
+
+**********************************************************************
+Hello mhasoba
+Hello mhasoba
+
+
+**********************************************************************
+
+Code ran without errors
+
+Time consumed = 0.00790s
+
+======================================================================
+======================================================================
+Finished running scripts
+
+Ran into 5 errors
+
+======================================================================
+======================================================================
+
+FINISHED WEEKLY ASSESSMENT
+
+Current Points for the Week = 99.0
+
+NOTE THAT THESE ARE POINTS, NOT MARKS FOR THE WEEK!
