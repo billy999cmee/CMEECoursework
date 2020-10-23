@@ -11,7 +11,7 @@ import sys
 
 # Two example sequences to match
 
-if len(sys.argv) == 1:
+if len(sys.argv) == 2: #this is the length, so 1 for align_seqs.py and 1 for the input file
     with open(sys.argv[1], 'r') as f:
         seqs = f.read()
         seqs = seqs.split(",")
