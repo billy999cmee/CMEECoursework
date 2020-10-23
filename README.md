@@ -21,7 +21,6 @@ All of the data are obtained from:
 <br> csv package
 
 **Installation:** 
-
 <u> Week1  
 <br> tiff2png.sh: apt install imagemagick
 <br> FirstExample.tex: sudo apt-get install texlive-full texlive-fonts-recommended texlive-pictures texlive-latex-extra imagemagick  
