@@ -21,14 +21,13 @@ All of the data are obtained from:
 <br> csv package
 
 **Installation:** 
-<br> For week1  
 
-tiff2png.sh: apt install imagemagick
+<u> Week1  
+<br> tiff2png.sh: apt install imagemagick
 <br> FirstExample.tex: sudo apt-get install texlive-full texlive-fonts-recommended texlive-pictures texlive-latex-extra imagemagick  
 
-<br> For week2
-
-basic_csv.py: type "Import csv" in your python script (this is used in basic_csv.py)
+<u> Week2
+<br> basic_csv.py: type "Import csv" in your python script (this is used in basic_csv.py)
 
 **Project structure and Usage:**
 <br> There is a sub-directory for each week, within each of those sub-directories there is a standard structure of code, data, results and sandbox. The code directory contains all the codes, the data directory contains all the data downloaded for the practicals (see brief description section to obtain the data from the link), results will contain all the results generated from practicals and sandbox is a directory filled with many test files which will not be assessed on and will be git ignored.
