@@ -19,14 +19,19 @@ All of the data are obtained from:
 <br> Imagemagick
 <br> Latex
 <br> csv package
+<br> sys module
+<br> doctest module
 
 **Installation:** 
+
 <u> Week1  
 <br> tiff2png.sh: apt install imagemagick
 <br> FirstExample.tex: sudo apt-get install texlive-full texlive-fonts-recommended texlive-pictures texlive-latex-extra imagemagick  
 
 <u> Week2
-<br> basic_csv.py: type "Import csv" in your python script (this is used in basic_csv.py)
+<br> basic_csv.py: type "Import csv" in your python script 
+<br> sysargv.py, align_seqs.py: type "import sys" at the beginning of your python script 
+<br> cfexercises1.py, test_control_flow.py: type "import doctest" at the beginning of your python script
 
 **Project structure and Usage:**
 <br> There is a sub-directory for each week, within each of those sub-directories there is a standard structure of code, data, results and sandbox. The code directory contains all the codes, the data directory contains all the data downloaded for the practicals (see brief description section to obtain the data from the link), results will contain all the results generated from practicals and sandbox is a directory filled with many test files which will not be assessed on and will be git ignored.
