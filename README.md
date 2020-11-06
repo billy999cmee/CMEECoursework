@@ -16,11 +16,21 @@ All of the data are obtained from:
 <br> R 4.0.2
 
 **Dependencies:**
+<br> Week1:
 <br> Imagemagick
 <br> Latex
+
+<br> Week2:
 <br> csv package
 <br> sys module
 <br> doctest module
+
+<br> Week3:
+<br> tidyverse package
+<br> reshape2 package
+<br> ggplot2 package
+<br> maps package
+<br> rworldmap
 
 **Installation:** 
 
@@ -33,8 +43,15 @@ All of the data are obtained from:
 <br> sysargv.py, align_seqs.py: type "import sys" at the beginning of your python script 
 <br> cfexercises1.py, test_control_flow.py: type "import doctest" at the beginning of your python script
 
+<u> Week3
+<br> TAutoCorr.R, DataWrangTidy.R: type "install.packages("tidyverse")" at the R terminal and type library(tidyverse) at the beginning of your R script to load it 
+<br> DataWrang.R: type "install.packages("reshape2")" at the R terminal and type library(reshape2) at the beginning of your R script to load it 
+<br> MyBars.R, Girko.R, PP_Regress.R, GPDD_Data.R, plotLin.R: type "install.packages("ggplot2")" at the R terminal and type library(ggplot2) at the beginning of your R script to load it 
+<br> GPDD_Data.R: type "install.packages("maps")" at the R terminal and type library(maps) at the beginning of your R script to load it 
+<br> GPDD_Data.R: type "install.packages("rworldmap")" at the R terminal and type library(rworldmap) at the beginning of your R script to load it 
+
 **Project structure and Usage:**
-<br> There is a sub-directory for each week, within each of those sub-directories there is a standard structure of code, data, results and sandbox. The code directory contains all the codes, the data directory contains all the data downloaded for the practicals (see brief description section to obtain the data from the link), results will contain all the results generated from practicals and sandbox is a directory filled with many test files which will not be assessed on and will be git ignored.
+<br> There is a sub-directory for each week, within each of those sub-directories there is a standard structure of code, data, results and sandbox. The code directory contains all the codes, the data directory contains all the data downloaded for the practicals (see brief description section to obtain the data from the link), results will contain all the results generated from practicals and sandbox is a directory filled with many test files which will not be assessed on and will be git ignored. Sometimes, a sub-directory called writeup will appear in some of the weekly directories whhich will consist of Latex written work, pdf and png files.
 
 **Author name and contact**
 <br> Billy Lam
