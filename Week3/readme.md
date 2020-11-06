@@ -24,7 +24,7 @@
 
 
 **Project structure and Usage:**
-<br> Within this Week3 directory, there are sub-directories including code, data, result, writeup (Latex written work) and sandbox (used for testing and is gitignored) as instructed by TheMulQuaBio.
+<br> Within this Week3 directory, there are sub-directories including code, data, result and sandbox (used for testing and is gitignored) as instructed by TheMulQuaBio.
 
 **Author name and contact**
 <br> Billy Lam
