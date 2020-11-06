@@ -2,6 +2,9 @@
 ################## Wrangling the Pound Hill Dataset using Tidyverse############
 ###############################################################################
 
+#__author__ = 'Billy Lam (ykl17@ic.ac.uk)'
+#__version__ = '3.6.3'
+
 ############# Load the dataset ###############
 # could use read_csv to avoid setting stringsAsFactors=F
 #header=T to avoid an extra first column of numbers
@@ -16,8 +19,6 @@ require(tidyverse)
 tidyverse_packages(include_self = TRUE) 
 
 ############# Inspect the dataset ###############
-head(MyData)
-dim(MyData) # 45 60
 dplyr::glimpse(MyData) 
 
 ########### Transpose data ###########
@@ -40,7 +41,7 @@ MyData <- MyData %>% mutate_all(list(~na_if(.,"")))
 #From NA to 0
 MyData <- MyData %>% 
                  mutate(across(everything(), ~replace_na(.x, 0)))
-############# Make the first row as coolumn names ###############
+############# Make the first row as column names ###############
 #Dplyr option
 names(MyData) <- MyData %>% slice(1) %>% unlist()
 MyData <- MyData %>% slice(-1)

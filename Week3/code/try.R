@@ -23,7 +23,8 @@ hist(popn)
 #lapply(1:15, function(i) doit(popn))
 
 #Use lapply with try
-result <- lapply(1:15, function(i) try(doit(popn), FALSE)) #FALSE subdue errors
+result <- lapply(1:15, function(i) try(doit(popn), TRUE)) 
+#TRUE to subdue error messages
 
 #Errors stored in the object result
 class(result)
@@ -32,5 +33,5 @@ result
 #We can also store the results by using a forloop
 result <- vector("list", 15) #Preallocate/Initialize
 for(i in 1:15) {
-  result[[i]] <- try(doit(popn), FALSE)
+  result[[i]] <- try(doit(popn), TRUE)
 }

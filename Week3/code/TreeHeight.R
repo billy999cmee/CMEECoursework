@@ -39,4 +39,5 @@ for (i in 1:dim(tree)[1]){ #dim shows column and row, [1] only rows
 
 
 #Export the data into the result directory
-write.csv(treehts, "../results/TreeHts.csv")
+write.csv(treehts, "../results/TreeHts.csv", row.names = FALSE)
+

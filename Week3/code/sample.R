@@ -75,3 +75,4 @@ print(system.time(sapply_sample(popn, n, num)))
 
 print("The vectorized lapply approach takes:" )
 print(system.time(lapply_sample(popn, n, num)))
+

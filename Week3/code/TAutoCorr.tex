@@ -1,0 +1,61 @@
+\documentclass[12pt]{article}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{titling}
+
+\setlength{\droptitle}{-10em}   % This is your set screw
+
+\title{Autocorrelation in weather}
+
+\author{Billy Lam}
+
+\date{}
+
+\begin{document}
+  \maketitle
+
+  
+  \section{Introduction}
+    \qquad With climate change imposing a major impact on ecological communities, it is critical to understand the temporal variations in environmental factors. Temperatures in particular have strong impacts on population dynamics, especially if population responses are sensitive to fluctuations due to non-linearity in their ecological responses to temperatures.\cite{di2018increased} \\
+    
+    The goal of this practical is to figure out whether temperatures of one year is significantly correlated with successive years in a given location. We will not be using the standard correlation coefficients p-value calculations as climatic variables like temperatures in consecutive time-points of a time series are not independent.
+    
+  \section{Methods}
+  \qquad R version 3.6.3, was responsible for all the calculations and the generation of a histogram based on the EcolArchives.csv in the data directory. Firstly, the observed correlation coefficient was obtained by calculating temperatures between successive years.
+  Next, the times series was randomly permuted 10000 times, which a correlation coefficient was calculated for each random permutation. Lastly, the p-value was calculated based on the obtained results from above calculations with this following equation:
+  
+  
+  \begin{equation}
+          p-value = \frac{\sum_i n_i}{T_{iter}}, \text{ if } n_i > k_{obs}
+  \end{equation}
+
+  Where $n_i$ are the random correlation coefficients, $T_{iter}$ is the total number of iterations and $k_{obs}$ is the observed correlation coefficient. Only when a $n_i$ is greater than $k_{obs}$ will it contribute to calculating the p-value.
+  
+  \section{Results}
+   From our distribution plot (Fig.1), we can tell that the observed correlation coefficient lies on the very right of the distribution, which means that there is a positive correlation. Furthermore, with our calculated p-value, we can confidently conclude that the temperatures between successive years are significantly correlated as it is smaller than 0.05.
+  
+  \begin{table}[hb]
+      \centering
+      \begin{tabular}{||c c||}
+      \hline
+      Observed correlation coefficient & P-value \\ [0.5ex]
+      \hline\hline
+      0.326 & 0.0005 \\ [1ex]
+      \hline
+      \end{tabular}
+      \caption{calculated observed correlation coefficients and the p-value.}
+  \end{table}
+  
+
+
+  \begin{figure}[hb]
+    \centering
+    \includegraphics[width=1.0\textwidth]{Coeff_distri.png}
+    \caption{The distribution of correlation coefficients by randomizing the time series by 10000 times.}
+    \label{Overallfig}
+  \end{figure}
+  
+  \bibliographystyle{plain}
+  \bibliography{TAutoCorr}
+  
+\end{document}

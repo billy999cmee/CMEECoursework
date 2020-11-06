@@ -17,3 +17,7 @@ Exponential <- function(N0 = 1, r = 1, generations = 10){
 }
 
 plot(Exponential(), type="l", main="Exponential growth")
+
+# n: single step
+# c: exit browser and continue
+# q: exit browser and abort, return to top level
