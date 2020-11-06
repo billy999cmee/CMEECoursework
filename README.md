@@ -19,12 +19,10 @@ All of the data are obtained from:
 <br> Week1:
 <br> Imagemagick
 <br> Latex
-
 <br> Week2:
 <br> csv package
 <br> sys module
 <br> doctest module
-
 <br> Week3:
 <br> tidyverse package
 <br> reshape2 package
@@ -33,7 +31,6 @@ All of the data are obtained from:
 <br> rworldmap
 
 **Installation:** 
-
 <u> Week1  
 <br> tiff2png.sh: apt install imagemagick
 <br> FirstExample.tex: sudo apt-get install texlive-full texlive-fonts-recommended texlive-pictures texlive-latex-extra imagemagick  
