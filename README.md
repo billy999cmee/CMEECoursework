@@ -29,6 +29,16 @@ All of the data are obtained from:
 <br> ggplot2 package
 <br> maps package
 <br> rworldmap
+<br> Week7:
+<br> scipy module as sc
+<br> scipy.integrate sub-module as integrate
+<br> matplotlib.pylab sub-module as p
+<br> sys module
+<br> matplotlib.patches sub-module as mpatches
+<br> re module
+<br> subprocess module
+<br> os module
+<br> cProfile module
 
 **Installation:** 
 <u> Week1  
@@ -46,6 +56,17 @@ All of the data are obtained from:
 <br> MyBars.R, Girko.R, PP_Regress.R, GPDD_Data.R, plotLin.R: type "install.packages("ggplot2")" at the R terminal and type library(ggplot2) at the beginning of your R script to load it 
 <br> GPDD_Data.R: type "install.packages("maps")" at the R terminal and type library(maps) at the beginning of your R script to load it 
 <br> GPDD_Data.R: type "install.packages("rworldmap")" at the R terminal and type library(rworldmap) at the beginning of your R script to load it 
+
+<u> Week7
+<br> LV1.py, LV2.py: type "import scipy as sc" at the beginning of your python script 
+<br> LV1.py, LV2.py: type "import scipy.integrate as integrate" at the beginning of your python script 
+<br> LV1.py, LV2.py: type "import matplotlib.pylab as p" at the beginning of your python script
+<br> LV2.py: type "import matplotlib.pylab as p" at the beginning of your python script
+<br> LV2.py: type "import sys" at the beginning of your python script
+<br> blackbirds.py: type "import re" at the beginning of your python script
+<br> using_os.py, run_fmr_R.py: type "import subprocess" at the beginning of your python script
+<br> using_os.py: type "import os" at the beginning of your python script
+<br> run_LV.py: type "import cProfile" at the beginning of oyur python script
 
 **Project structure and Usage:**
 <br> There is a sub-directory for each week, within each of those sub-directories there is a standard structure of code, data, results and sandbox. The code directory contains all the codes, the data directory contains all the data downloaded for the practicals (see brief description section to obtain the data from the link), results will contain all the results generated from practicals and sandbox is a directory filled with many test files which will not be assessed on and will be git ignored. Sometimes, a sub-directory called writeup will appear in some of the weekly directories whhich will consist of Latex written work, pdf and png files.
