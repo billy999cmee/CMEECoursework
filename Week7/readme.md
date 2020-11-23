@@ -30,7 +30,7 @@
 <br> blackbirds.py: type "import re" at the beginning of your python script
 <br> using_os.py, run_fmr_R.py: type "import subprocess" at the beginning of your python script
 <br> using_os.py: type "import os" at the beginning of your python script
-<br> run_LV.py: type "import cProfile" at the beginning of oyur python script
+<br> run_LV.py: type "import cProfile" at the beginning of your python script
 
 **Project structure and Usage:**
 <br> Within this Week7 directory, there are sub-directories including code, data, result and sandbox (this is used for testing and is gitignored) as instructed by TheMulQuaBio.
