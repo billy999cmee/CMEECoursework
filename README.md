@@ -19,16 +19,19 @@ All of the data are obtained from:
 <br> Week1:
 <br> Imagemagick
 <br> Latex
+
 <br> Week2:
 <br> csv package
 <br> sys module
 <br> doctest module
+
 <br> Week3:
 <br> tidyverse package
 <br> reshape2 package
 <br> ggplot2 package
 <br> maps package
 <br> rworldmap
+
 <br> Week7:
 <br> scipy module as sc
 <br> scipy.integrate sub-module as integrate

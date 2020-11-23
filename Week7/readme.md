@@ -3,7 +3,6 @@
 
 **Brief description:**
 <br> This is a beginner's course on Python and writing Python codes. Only the second Python chapter has been gone through, it includes Python data structures, writing Python codes, looping, comprehensions, debugging etc.
-
 <br> Chapters can be accessed through this link down below:
 <br> https://mhasoba.github.io/TheMulQuaBio/intro.html
 
