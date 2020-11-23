@@ -39,6 +39,8 @@ All of the data are obtained from:
 <br> subprocess module
 <br> os module
 <br> cProfile module
+<br> timeit module
+<br> time module
 
 **Installation:** 
 <u> Week1  
@@ -67,6 +69,8 @@ All of the data are obtained from:
 <br> using_os.py, run_fmr_R.py: type "import subprocess" at the beginning of your python script
 <br> using_os.py: type "import os" at the beginning of your python script
 <br> run_LV.py: type "import cProfile" at the beginning of oyur python script
+<br> timeitme.py: type "import timeit" at the beginning of your python script
+<br> timeitme.py: type "import time" at the beginning of your python script
 
 **Project structure and Usage:**
 <br> There is a sub-directory for each week, within each of those sub-directories there is a standard structure of code, data, results and sandbox. The code directory contains all the codes, the data directory contains all the data downloaded for the practicals (see brief description section to obtain the data from the link), results will contain all the results generated from practicals and sandbox is a directory filled with many test files which will not be assessed on and will be git ignored. Sometimes, a sub-directory called writeup will appear in some of the weekly directories whhich will consist of Latex written work, pdf and png files.
