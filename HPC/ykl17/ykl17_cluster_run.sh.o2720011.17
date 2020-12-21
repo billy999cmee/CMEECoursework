@@ -1,0 +1,70 @@
+R is about to run
+
+R version 3.6.1 (2019-07-05) -- "Action of the Toes"
+Copyright (C) 2019 The R Foundation for Statistical Computing
+Platform: x86_64-conda_cos6-linux-gnu (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> # CMEE 2020 HPC excercises R code HPC run code proforma
+> 
+> rm(list=ls()) # good practice 
+> graphics.off()
+> source("/rds/general/user/ykl17/home/ykl17_HPC_2020_main.R")
+> 
+> ##################################### Main.R ###################################
+> 
+> ############################## Main.R #####################################
+> 
+> # Question 18
+> iter <- as.numeric(Sys.getenv("PBS_ARRAY_INDEX"))
+> 
+> # Testing codes locally
+> #iter <- list(seq(1, 100, by = 1))
+> #iter <- 32
+> 
+> # Makes seed different for each simulation
+> set.seed(iter)
+> 
+> # 4 different community sizes in the 100 simulations, 25 for each
+> if (iter > 0 & iter <= 25){
++   size <- 500
++ }
+> if (iter > 25 & iter <= 50){
++   size <- 1000
++ }
+> if (iter > 50 & iter <= 75){
++   size <- 2500
++ }
+> if (iter > 75 & iter <= 100){
++   size <- 5000
++ }
+> 
+> # Create file name to store results
+> output_file_name <- paste("ykl17_cluster_output", iter, ".rda", sep = "")
+> 
+> cluster_run(speciation_rate = 0.0068445, size = size, wall_time = (11.5 * 60), interval_rich = 1, interval_oct = size/10, burn_in_generations = 8 * size, output_file_name = output_file_name)
+> 
+R has finished running
+
+============================================
+
+        Job resource usage summary 
+
+                 Memory (GB)    NCPUs
+ Requested  :         1             1
+ Used       :         0 (peak)   0.97 (ave)
+
+============================================
