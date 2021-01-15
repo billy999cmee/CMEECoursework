@@ -38,8 +38,8 @@ def main(argv):
     Checks if species in TestOaksData.csv are from the genus quercus, and writes
     them to JustOaksData.csv if they are.
     """
-    f = open('../Data/TestOaksData.csv','r')
-    g = open('../Data/JustOaksData.csv','w')
+    f = open('../data/TestOaksData.csv','r')
+    g = open('../data/JustOaksData.csv','w')
     taxa = csv.reader(f)
     csvwrite = csv.writer(g)
     # oaks = set()

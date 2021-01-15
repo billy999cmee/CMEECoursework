@@ -86,9 +86,9 @@ def main(argv):
         print("Aligning input sequences... please wait.")
         seq1, seq2 = get_seq(sys.argv[1]), get_seq(sys.argv[2]) 
     else: #if not, inform them and use the default fasta files
-        print("Two .fasta files not provided. Using defaults from Data/")
-        seq1 = get_seq("../Data/407228326.fasta")
-        seq2 = get_seq("../Data/407228412.fasta")
+        print("Two .fasta files not provided. Using defaults from data/")
+        seq1 = get_seq("../data/407228326.fasta")
+        seq2 = get_seq("../data/407228412.fasta")
     
     
     # Assign the longer sequence to s1, and the shorter to s2
@@ -125,7 +125,7 @@ def main(argv):
             # uses returned variables to write a statement about the alignment 
             # giving its score and startpoint, and assigns 3 lines of alignment 
             # (s1, s2 and matching bases) to a variable each for later printing
-    f = open('../Results/fasta_align.txt', 'w')
+    f = open('../results/fasta_align.txt', 'w')
     f.write(best_alignment)
     f.close()
     print("Done!")
