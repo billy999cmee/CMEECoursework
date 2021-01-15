@@ -13,7 +13,7 @@ require(tidyverse)
 require(broom)
 
 # load data
-df <- read.csv("../Data/EcolArchives-E089-51-D1.csv")
+df <- read.csv("../data/EcolArchives-E089-51-D1.csv")
 dplyr::glimpse(df)
 
 # convert masses in mg to g
@@ -41,4 +41,4 @@ linreg <- df %>%
   # remove mod column
   dplyr::select(-mod)
 
-write.csv(linreg, "../Results/PP_Regress_loc_Results.csv")
+write.csv(linreg, "../results/PP_Regress_loc_Results.csv")

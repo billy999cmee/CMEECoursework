@@ -56,7 +56,7 @@ getCSV_addTreeHeight <- function(filename.csv){
     MyData[,4] <- TreeHeight(MyData[,3], MyData[,2])
     basename <- tools::file_path_sans_ext(basename(filename.csv))
     #tool removes extension, basename() removes filepath
-    new_fpath <- paste("../Results/",basename,"_treeheights.csv", sep = "")
+    new_fpath <- paste("../results/",basename,"_treeheights.csv", sep = "")
     write.csv(MyData, new_fpath)
     return (NULL)
 }
@@ -85,7 +85,7 @@ for (i in term_args){
 
 # no file entered or no compatible csvs entered, uses default
 if (length(term_args) == 0 || csv_count == 0) { # If no file converted or argued
-    cat("No appropriate .csv file entered, using default: ../Data/trees.csv\n")
-    getCSV_addTreeHeight("../Data/trees.csv")
-    cat("Finished converting ../Data/trees.csv\n")
+    cat("No appropriate .csv file entered, using default: ../data/trees.csv\n")
+    getCSV_addTreeHeight("../data/trees.csv")
+    cat("Finished converting ../data/trees.csv\n")
 }
