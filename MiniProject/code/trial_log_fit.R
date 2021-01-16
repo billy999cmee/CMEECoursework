@@ -25,21 +25,27 @@ loglogistic_model <- function(N_0, N_max, r_max, t){
 #   return(exp(N_0 + (N_max - N_0) * exp(-exp(r_max * exp(1) * (t_lag - t)/((N_max - N_0) * log(10)) + 1))))
 # }  
 
-gompertz_model <- function(t, r_max, N_max, N_0, t_lag){ # Modified gompertz growth model (Zwietering 1990)
+gompertz_model <- function(t, r_max, N_max, N_0, t_lag){ 
   return(N_0 + (N_max - N_0) * exp(-exp(r_max * exp(1) * (t_lag - t)/((N_max - N_0) * log(10)) + 1)))
 }     
 
-baranyi_model <- function(N_0, N_max, r_max, t, t_lag){ # Baranyi model (Baranyi 1993)
+baranyi_model <- function(N_0, N_max, r_max, t, t_lag){ 
   return(N_max + log10((-1+exp(r_max*t_lag) + exp(r_max*t))/(exp(r_max*t) - 1 + exp(r_max*t_lag) * 10^(N_max-N_0))))
+}
+
+buchanan_model <- function(t, r_max, N_max, N_0, t_lag){ 
+  return(N_0 + (t >= t_lag) * (t <= (t_lag + (N_max - N_0) * log(10)/r_max)) * r_max * (t - t_lag)/log(10) + (t >= t_lag) * (t > (t_lag + (N_max - N_0) * log(10)/r_max)) * (N_max - N_0))
 }
 
 ## Initialize the results data frame ##
 Stats50 <- data.frame(ID = character(), Quadratic_AIC = numeric(), 
                       Cubic_AIC = numeric(), Logistic_AIC = numeric(), 
-                      Gompertz_AIC = numeric(), Baranyi_AIC = numeric(), 
+                      Baranyi_AIC = numeric(), 
+                      Buchanan_AIC = numeric(),
                       Quadratic_rsq = numeric(), Cubic_rsq = numeric(), 
-                      Logistic_rsq = numeric(), Gompertz_rsq = numeric(),
-                      Baranyi_rsq = numeric(), stringsAsFactors = FALSE)
+                      Logistic_rsq = numeric(),
+                      Baranyi_rsq = numeric(), Buchanan_rsq = numeric(),
+                      stringsAsFactors = FALSE)
 
 
 ## Initializing starting parameters, model fitting (linear and nonn-linear), calculating AIC, plotting!
@@ -135,12 +141,13 @@ for (i in unique(data$id2)){
       if (class(Logis_Fit) != 'try-error'){
         LogisAIC <- LogisAIC2
         Logistic_rsq <- Logistic_rsq2
+        Logis_Fit_final <- Logis_Fit
       }
     }
     
     # If the newly sampled value has a better AIC and rsq values, replace
     if (exists("LogisAIC") == TRUE && exists("Logistic_rsq") == TRUE){
-      if (LogisAIC2 <= LogisAIC && Logistic_rsq2 >= Logistic_rsq){
+      if (LogisAIC2 < LogisAIC){
         LogisAIC <- LogisAIC2
         Logistic_rsq <- Logistic_rsq2
         Logis_Fit_final <- Logis_Fit
@@ -148,44 +155,46 @@ for (i in unique(data$id2)){
     }
       
     # Gompertz
-    Gomp_Fit <- try(nlsLM(logpop1 ~ gompertz_model(N_0, N_max, r_max, t = Time, 
-                                                   t_lag), data = supb, 
-                          start = c(N_0 = unname(starting_val[z, 1]), 
-                                    N_max = unname(starting_val[z, 2]), 
-                                    r_max = unname(starting_val[z, 3]), 
-                                    t_lag = unname(starting_val[z, 4])), 
-                          control = nls.lm.control(maxiter = 100)), silent = T) 
-    if (class(Gomp_Fit) != 'try-error'){
-      GompertzAIC2 <- AIC(Gomp_Fit)
-      Gompertz_rss <- sum(residuals(Gomp_Fit)^2)
-      Gompertz_tss <- sum((supb$logpop1 - mean(supb$logpop1))^2)
-      Gompertz_rsq2 <- 1 - (Gompertz_rss/Gompertz_tss)
-    } else {
-      GompertzAIC2 <- "NA"
-      Gompertz_rsq2 <- "NA"
-    }
-    # if (class(Gomp_Fit) != 'try-error') {
-    #   cat("Gomp", counter, "/n")
+    # Gomp_Fit <- try(nlsLM(logpop1 ~ gompertz_model(N_0, N_max, r_max, t = Time, 
+    #                                                t_lag), data = supb, 
+    #                       start = c(N_0 = unname(starting_val[z, 1]), 
+    #                                 N_max = unname(starting_val[z, 2]), 
+    #                                 r_max = unname(starting_val[z, 3]), 
+    #                                 t_lag = unname(starting_val[z, 4])), 
+    #                       control = nls.lm.control(maxiter = 100)), silent = T) 
+    # if (class(Gomp_Fit) != 'try-error'){
+    #   GompertzAIC2 <- AIC(Gomp_Fit)
+    #   Gompertz_rss <- sum(residuals(Gomp_Fit)^2)
+    #   Gompertz_tss <- sum((supb$logpop1 - mean(supb$logpop1))^2)
+    #   Gompertz_rsq2 <- 1 - (Gompertz_rss/Gompertz_tss)
+    # } else {
+    #   GompertzAIC2 <- "NA"
+    #   Gompertz_rsq2 <- "NA"
     # }
-    
-    # Make sure the first AIC and rsq values are set as a baseline for comparisons
-    
-    if (exists("GompertzAIC") == FALSE && exists("Gompertz_rsq") == FALSE){
-      if (class(Gomp_Fit) != 'try-error'){
-        GompertzAIC <- GompertzAIC2
-        Gompertz_rsq <- Gompertz_rsq2
-      }
-    }
-    
-    
-    # If the newly sampled value has a better AIC and rsq values, replace
-    if (exists("GompertzAIC") == TRUE && exists("Gompertz_rsq") == TRUE){
-      if (GompertzAIC2 <= GompertzAIC && Gompertz_rsq2 >= Gompertz_rsq){
-        GompertzAIC <- GompertzAIC2
-        Gompertz_rsq <- Gompertz_rsq2
-        Gomp_Fit_final <- Gomp_Fit
-      }
-    }
+    # # if (class(Gomp_Fit) != 'try-error') {
+    # #   cat("Gomp", counter, "/n")
+    # # }
+    # 
+    # # Make sure the first AIC and rsq values are set as a baseline for comparisons
+    # 
+    # if (exists("GompertzAIC") == FALSE && exists("Gompertz_rsq") == FALSE){
+    #   if (class(Gomp_Fit) != 'try-error'){
+    #     GompertzAIC <- GompertzAIC2
+    #     Gompertz_rsq <- Gompertz_rsq2
+    #     Gomp_Fit_final <- Gomp_Fit
+    #   }
+    # }
+    # 
+    # 
+    # # If the newly sampled value has a better AIC and rsq values, replace
+    # if (exists("GompertzAIC") == TRUE && exists("Gompertz_rsq") == TRUE){
+    #   if (GompertzAIC2 < GompertzAIC){
+    #     GompertzAIC <- GompertzAIC2
+    #     Gompertz_rsq <- Gompertz_rsq2
+    #     Gomp_Fit_final <- Gomp_Fit
+    #     cat("Gomp", counter, "/n")
+    #   }
+    # }
     
     # Baranyi
     Bar_Fit <- try(nlsLM(logpop1 ~ baranyi_model(N_0, N_max, r_max, t = Time, 
@@ -210,6 +219,7 @@ for (i in unique(data$id2)){
       if (BaranyiAIC2 != "NA" && Baranyi_rsq2 != "NA"){
         BaranyiAIC <- BaranyiAIC2
         Baranyi_rsq <- Baranyi_rsq2
+        Bar_Fit_final <- Bar_Fit # Make sure model fit is saved if the first sampled value is the best
       }
     }
     
@@ -231,7 +241,7 @@ for (i in unique(data$id2)){
     # If the newly sampled value has a better AIC and rsq values, replace
     # if (BaranyiAIC2 != "NA" && BaranyiAIC == "NA"){
     if (exists("BaranyiAIC") == TRUE && exists("Baranyi_rsq") == TRUE){
-      if (BaranyiAIC2 <= BaranyiAIC && Baranyi_rsq2 >= Baranyi_rsq){
+      if (BaranyiAIC2 < BaranyiAIC){
         BaranyiAIC <- BaranyiAIC2
         Baranyi_rsq <- Baranyi_rsq2
         Bar_Fit_final <- Bar_Fit
@@ -239,14 +249,61 @@ for (i in unique(data$id2)){
     }
     # }
     
+    # Buchnan
+    Buch_Fit <- try(nlsLM(logpop1 ~ buchanan_model(N_0, N_max, r_max, t = Time, 
+                                                 t_lag), data = supb, 
+                         start = c(N_0 = unname(starting_val[z, 1]), 
+                                   N_max = unname(starting_val[z, 2]), 
+                                   r_max = unname(starting_val[z, 3]), 
+                                   t_lag = unname(starting_val[z, 4])), 
+                         control = nls.lm.control(maxiter = 100)), silent = T) 
+    if (class(Buch_Fit) != 'try-error'){
+      BuchananAIC2 <- AIC(Buch_Fit)
+      Buchanan_rss <- sum(residuals(Buch_Fit)^2)
+      Buchanan_tss <- sum((supb$logpop1 - mean(supb$logpop1))^2)
+      Buchanan_rsq2 <- 1 - (Buchanan_rss/Buchanan_tss)
+    } else {
+      BuchananAIC2 <- "NA"
+      Buchanan_rsq2 <- "NA"
+    }    
+    
+    # Make sure the first AIC and rsq values that are not NAs are set as a baseline for comparisons
+    if (exists("BuchananAIC") == FALSE && exists("Buchanan_rsq") == FALSE){
+      if (BuchananAIC2 != "NA" && Buchanan_rsq2 != "NA"){
+        BuchananAIC <- BuchananAIC2
+        Buchanan_rsq <- Buchanan_rsq2
+        Buch_Fit_final <- Buch_Fit # Make sure the model fit is saved if the first sampled value has the best fit
+        cat("Buch", counter, "/n")
+      }
+    }
+    
+    # If the newly sampled value has a better AIC and rsq values, replace
+    if (exists("BuchananAIC") == TRUE && exists("Buchanan_rsq") == TRUE){
+      if (BuchananAIC2 < BuchananAIC){
+        BuchananAIC <- BuchananAIC2
+        Buchanan_rsq <- Buchanan_rsq2
+        Buch_Fit_final <- Buch_Fit
+      }
+    }
+    
     counter <- counter + 1
     
   }
+  ## If none of the sampled values can fit the data, fill with NA
+  if (exists("BaranyiAIC") == FALSE && exists("Baranyi_rsq") == FALSE){
+    BaranyiAIC <- "NA"
+    Baranyi_rsq <- "NA"
+  }
+  
+  if (exists("BuchananAIC") == FALSE && exists("Buchanan_rsq") == FALSE){
+    BuchananAIC <- "NA"
+    Buchanan_rsq <- "NA"
+  }
   
   # Filling in the results data frame with calculated AIC and adj r-squared values
-  whtev <- c(ID, QuaAIC, CubAIC, LogisAIC, GompertzAIC, BaranyiAIC, Qua_rsq, 
-             Cub_rsq, Logistic_rsq, Gompertz_rsq, Baranyi_rsq)
-  Stats50[i, ] <- whtev
+  stat_values <- c(ID, QuaAIC, CubAIC, LogisAIC, BaranyiAIC, BuchananAIC, Qua_rsq, 
+             Cub_rsq, Logistic_rsq, Baranyi_rsq, Buchanan_rsq)
+  Stats50[i, ] <- stat_values
   
   
   
@@ -277,16 +334,18 @@ for (i in unique(data$id2)){
     names(df3) <- c("length", "PopBio_pred", "Model")
     dfp <- rbind(dfp, df3)
   }
-  if(GompertzAIC != "NA" && is.infinite(GompertzAIC) == FALSE){
-    Gop <- gompertz_model(t = length, r_max = coef(Gomp_Fit_final)["r_max"], 
-                          N_max = coef(Gomp_Fit_final)["N_max"], 
-                          N_0 = coef(Gomp_Fit_final)["N_0"], 
-                          t_lag = coef(Gomp_Fit_final)["t_lag"])
-    df4 <- data.frame(length, Gop)
-    df4$Model <- "Gompertz"
-    names(df4) <- c("length", "PopBio_pred", "Model")
-    dfp <- rbind(dfp, df4)
-  }
+  
+  # if(GompertzAIC != "NA" && is.infinite(GompertzAIC) == FALSE){
+  #   Gop <- gompertz_model(t = length, r_max = coef(Gomp_Fit_final)["r_max"], 
+  #                         N_max = coef(Gomp_Fit_final)["N_max"], 
+  #                         N_0 = coef(Gomp_Fit_final)["N_0"], 
+  #                         t_lag = coef(Gomp_Fit_final)["t_lag"])
+  #   df4 <- data.frame(length, Gop)
+  #   df4$Model <- "Gompertz"
+  #   names(df4) <- c("length", "PopBio_pred", "Model")
+  #   dfp <- rbind(dfp, df4)
+  # }
+  
   if(BaranyiAIC != "NA" && is.infinite(BaranyiAIC) == FALSE){
     Bp <- baranyi_model(t = length, r_max = coef(Bar_Fit_final)["r_max"], 
                         N_max = coef(Bar_Fit_final)["N_max"], 
@@ -297,7 +356,16 @@ for (i in unique(data$id2)){
     names(df5) <- c("length", "PopBio_pred", "Model")
     dfp <- rbind(dfp, df5)
   }
-  
+  if(BuchananAIC != "NA" && is.infinite(BuchananAIC) == FALSE){
+    Bch <- buchanan_model(t = length, r_max = coef(Buch_Fit_final)["r_max"], 
+                        N_max = coef(Buch_Fit_final)["N_max"], 
+                        N_0 = coef(Buch_Fit_final)["N_0"], 
+                        t_lag = coef(Buch_Fit_final)["t_lag"])
+    df6 <- data.frame(length, Bch)
+    df6$Model <- "Buchanan"
+    names(df6) <- c("length", "PopBio_pred", "Model")
+    dfp <- rbind(dfp, df6)
+  }
   
   ## Plotting ##
   p <- ggplot(supb, aes(x = Time, y = logpop1)) +
@@ -309,10 +377,22 @@ for (i in unique(data$id2)){
     labs(title = paste(ID), x = ("Time (hrs)"), y = paste("log(Population) ", supb$PopBio_units[i], sep = ""))
 
   ## Save plot in results
-  png(paste("", i, ".png", sep = ""), width=600, height=500, res=120) # start export
+  png(paste("../sandbox/", i, ".png", sep = ""), width=600, height=500, res=120) # start export
   print(p)
-  dev.off() # finish export
+  dev.off() 
+  
+  ## Remove the best AIC, rsq values and model fits before the start of next loop
+  # rm(list = ls(pattern = "^Baranyi"))
+  rm(list = ls(pattern = "^Bar"))
+  # rm(list = ls(pattern = "^Logistic_"))
+  rm(list = ls(pattern = "^Logis"))
+  # rm(list = ls(pattern = "^LogisA"))
+  # rm(list = ls(pattern = "^Gompertz_"))
+  # rm(list = ls(pattern = "^GompertzA"))
+  # rm(list = ls(pattern = "^Gomp_F"))
+  rm(list = ls(pattern = "^Buch"))
+  # rm(list = ls(pattern = "^Buchanan"))
 }
 
 ## Export stats results
-write.csv(Stats50, "../data/logstats.csv")
+write.csv(Stats50, "../data/logstats2.csv")
