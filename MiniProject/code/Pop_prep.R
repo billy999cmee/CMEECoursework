@@ -13,7 +13,7 @@ data <- read.csv("../data/LogisticGrowthData.csv", stringsAsFactors = F)
 unique(data$PopBio_units) # 4 unique response variable units
 unique(data$Time_units) # 1 independent unit
 
-# Make a new citation column by renaming one of the citations as it cause probs in ggtitle()
+# Make a new citation column by renaming one of the citations as it cause problems in ggtitle()
 data$Citation2 <- gsub("Bernhardt, J.R., Sunday, J.M. and O’Connor, M.I., 2018. Metabolic theory and the temperature-size rule explain the temperature dependence of population carrying capacity. The American naturalist, 192\\(6\\), pp.687\\-697",
                        "Bernhardt JR, Sunday JM and OConnor MI, 2018. Metabolic theory", data$Citation) 
 
@@ -27,16 +27,13 @@ data$Species <- gsub(" StrainCYA28", "", data$Species)
 # Remove "-" in Medium
 data$Medium <- gsub("-", " ", data$Medium)
 
-# Checking for negative values and removing/converting them
-#which(data$Time < 0) # use sum for total, 68
-#which(data$PopBio < 0) # 23
 
 #############################
-data <- data[data$PopBio > 0, ] # remove negative pop values, if bact dies and 
-data$Time <- abs(data$Time) # convert negatives in Time, 
+data <- data[data$PopBio > 0, ] # Remove negative pop values 
+data$Time <- abs(data$Time) # Convert negatives in Time, 
 #############################
 
-# Make a new id column, id2 = clean unique column
+# Make a new id column, id2 = clean unique numbering column
 data$id <- paste(data$Species, data$Temp, data$Medium, data$Citation)
 data$id2 <- cumsum(!duplicated(data$id))
 

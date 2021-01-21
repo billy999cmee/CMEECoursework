@@ -21,7 +21,7 @@ loglogistic_model <- function(N_0, N_max, r_max, t){
   return(log((N_0 * N_max * exp(r_max*t)) / (N_max + N_0 * (exp(r_max*t) - 1))))
 }
 
-# gompertz_model <- function(t, r_max, N_max, N_0, t_lag){ # Modified gompertz growth model (Zwietering 1990)
+# exp_gompertz_model <- function(t, r_max, N_max, N_0, t_lag){ # Modified gompertz growth model (Zwietering 1990)
 #   return(exp(N_0 + (N_max - N_0) * exp(-exp(r_max * exp(1) * (t_lag - t)/((N_max - N_0) * log(10)) + 1))))
 # }  
 
@@ -47,12 +47,12 @@ Stats50 <- data.frame(ID = character(), Quadratic_AIC = numeric(),
                       Baranyi_rsq = numeric(), Buchanan_rsq = numeric(),
                       stringsAsFactors = FALSE)
 
-
+counter <- 1
 ## Initializing starting parameters, model fitting (linear and nonn-linear), calculating AIC, plotting!
 for (i in unique(data$id2)){
   # For each unique data set
   supb <- subset(data, data$id2 == i)
-  ID <- supb$id2[i] #Getting the unique ID for each data set
+  ID <- counter 
   
   # Ignore data sets with less than 4 data points
   if ((nrow(supb)<4) == TRUE) {next}
@@ -112,14 +112,11 @@ for (i in unique(data$id2)){
   starting_val <- cbind(N_0_start_lots, N_max_start_lots, r_max_start_lots, t_lag_start_lots)
   colnames(starting_val) <- c("N_0_start", "N_max_start", "r_max_start", "t_lag_start")
   
-  # Set a counter for the if statement in the second loop
-  counter <- 1
-  
   for (z in 1:nrow(starting_val)){
     ################ Fitting non-linear models ##################
     
     # Logistic
-    Logis_Fit <- try(nlsLM(logpop1 ~ logistic_model(N_0, N_max, r_max, t = Time), 
+    Logis_Fit <- try(nlsLM(logpop1 ~ loglogistic_model(N_0, N_max, r_max, t = Time), 
                            data = supb, start = c(N_0 = unname(starting_val[z, 1]), 
                                                   N_max = unname(starting_val[z, 2]), 
                                                   r_max = unname(starting_val[z, 3])), 
@@ -154,7 +151,7 @@ for (i in unique(data$id2)){
       }
     }
       
-    # Gompertz
+    # Gompertz, REMOVED
     # Gomp_Fit <- try(nlsLM(logpop1 ~ gompertz_model(N_0, N_max, r_max, t = Time, 
     #                                                t_lag), data = supb, 
     #                       start = c(N_0 = unname(starting_val[z, 1]), 
@@ -171,9 +168,6 @@ for (i in unique(data$id2)){
     #   GompertzAIC2 <- "NA"
     #   Gompertz_rsq2 <- "NA"
     # }
-    # # if (class(Gomp_Fit) != 'try-error') {
-    # #   cat("Gomp", counter, "/n")
-    # # }
     # 
     # # Make sure the first AIC and rsq values are set as a baseline for comparisons
     # 
@@ -223,20 +217,6 @@ for (i in unique(data$id2)){
       }
     }
     
-    # if (counter == 1 && class(Bar_Fit) != 'try-error'){
-    #   BaranyiAIC <- BaranyiAIC2
-    #   Baranyi_rsq <- Baranyi_rsq2
-    # } else if (counter == 2 && class(Bar_Fit) != 'try-error'){
-    #   if (BaranyiAIC == "NA" && Baranyi_rsq == "NA"){
-    #     BaranyiAIC <- BaranyiAIC2
-    #     Baranyi_rsq <- Baranyi_rsq2
-    #   }
-    # } else if (counter == 3 && class(Bar_Fit) != 'try-error'){
-    #   if (BaranyiAIC == "NA" && Baranyi_rsq == "NA"){
-    #     BaranyiAIC <- BaranyiAIC2
-    #     Baranyi_rsq <- Baranyi_rsq2
-    #   }
-    # }
     
     # If the newly sampled value has a better AIC and rsq values, replace
     # if (BaranyiAIC2 != "NA" && BaranyiAIC == "NA"){
@@ -273,7 +253,6 @@ for (i in unique(data$id2)){
         BuchananAIC <- BuchananAIC2
         Buchanan_rsq <- Buchanan_rsq2
         Buch_Fit_final <- Buch_Fit # Make sure the model fit is saved if the first sampled value has the best fit
-        cat("Buch", counter, "/n")
       }
     }
     
@@ -285,9 +264,6 @@ for (i in unique(data$id2)){
         Buch_Fit_final <- Buch_Fit
       }
     }
-    
-    counter <- counter + 1
-    
   }
   ## If none of the sampled values can fit the data, fill with NA
   if (exists("BaranyiAIC") == FALSE && exists("Baranyi_rsq") == FALSE){
@@ -305,7 +281,7 @@ for (i in unique(data$id2)){
              Cub_rsq, Logistic_rsq, Baranyi_rsq, Buchanan_rsq)
   Stats50[i, ] <- stat_values
   
-  
+  counter <- counter + 1
   
   ################## Creating the plots #####################
   # x-axis for the models
@@ -314,24 +290,24 @@ for (i in unique(data$id2)){
   # Saving the predicted data points for each model and merging them all together
   Qp <- predict.lm(Qua_Fit, data.frame(Time = length))
   df1 <- data.frame(length, Qp)
-  df1$Model <- "Quadratic"
-  names(df1) <- c("length", "PopBio_pred", "Model")
+  df1$Models <- "Quadratic"
+  names(df1) <- c("length", "PopBio_pred", "Models")
   dfp <- df1
   
   if(CubAIC != "NA" && is.infinite(CubAIC) == FALSE){ # If the AIC is not NA and infinite
     Cp <- predict.lm(Cub_Fit, data.frame(Time = length))
     df2 <- data.frame(length, Cp)
-    df2$Model <- "Cubic"
-    names(df2) <- c("length", "PopBio_pred", "Model")
+    df2$Models <- "Cubic"
+    names(df2) <- c("length", "PopBio_pred", "Models")
     dfp <- rbind(dfp, df2) # rbind the dataframes
   }
   if(LogisAIC != "NA" && is.infinite(LogisAIC) == FALSE){
-    Lp <- logistic_model(t = length, r_max = coef(Logis_Fit_final)["r_max"], 
+    Lp <- loglogistic_model(t = length, r_max = coef(Logis_Fit_final)["r_max"], 
                          N_max = coef(Logis_Fit_final)["N_max"], 
                          N_0 = coef(Logis_Fit_final)["N_0"])
     df3 <- data.frame(length, Lp)
-    df3$Model <- "Logistic"
-    names(df3) <- c("length", "PopBio_pred", "Model")
+    df3$Models <- "Logistic"
+    names(df3) <- c("length", "PopBio_pred", "Models")
     dfp <- rbind(dfp, df3)
   }
   
@@ -341,8 +317,8 @@ for (i in unique(data$id2)){
   #                         N_0 = coef(Gomp_Fit_final)["N_0"], 
   #                         t_lag = coef(Gomp_Fit_final)["t_lag"])
   #   df4 <- data.frame(length, Gop)
-  #   df4$Model <- "Gompertz"
-  #   names(df4) <- c("length", "PopBio_pred", "Model")
+  #   df4$Models <- "Gompertz"
+  #   names(df4) <- c("length", "PopBio_pred", "Models")
   #   dfp <- rbind(dfp, df4)
   # }
   
@@ -352,8 +328,8 @@ for (i in unique(data$id2)){
                         N_0 = coef(Bar_Fit_final)["N_0"], 
                         t_lag = coef(Bar_Fit_final)["t_lag"])
     df5 <- data.frame(length, Bp)
-    df5$Model <- "Baranyi"
-    names(df5) <- c("length", "PopBio_pred", "Model")
+    df5$Models <- "Baranyi"
+    names(df5) <- c("length", "PopBio_pred", "Models")
     dfp <- rbind(dfp, df5)
   }
   if(BuchananAIC != "NA" && is.infinite(BuchananAIC) == FALSE){
@@ -362,37 +338,35 @@ for (i in unique(data$id2)){
                         N_0 = coef(Buch_Fit_final)["N_0"], 
                         t_lag = coef(Buch_Fit_final)["t_lag"])
     df6 <- data.frame(length, Bch)
-    df6$Model <- "Buchanan"
-    names(df6) <- c("length", "PopBio_pred", "Model")
+    df6$Models <- "Buchanan"
+    names(df6) <- c("length", "PopBio_pred", "Models")
     dfp <- rbind(dfp, df6)
   }
   
   ## Plotting ##
   p <- ggplot(supb, aes(x = Time, y = logpop1)) +
     geom_point(size = 3) + 
-    geom_line(data = dfp, aes(x = length, y = PopBio_pred, col = Model), size = 1.5) + # Model prediction lines
+    geom_line(data = dfp, aes(x = length, y = PopBio_pred, col = Models), size = 1.5) + # Model prediction lines
     scale_color_manual(values = c("#E69F00", "#009E73", "#D55E00", "#56B4E9", "#F0E442")) +
     theme_bw() + 
     theme(aspect.ratio = 1) + 
-    labs(title = paste(ID), x = ("Time (hrs)"), y = paste("log(Population) ", supb$PopBio_units[i], sep = ""))
+    labs(title = paste("ID number:", ID), x = ("Time (hrs)"), y = paste("log(Population) ", supb$PopBio_units[i], sep = "")) +
+    theme(plot.title = element_text(size = 16, face = "bold"))
 
   ## Save plot in results
-  png(paste("../sandbox/", i, ".png", sep = ""), width=600, height=500, res=120) # start export
+  png(paste("../data/", i, ".png", sep = ""), width=600, height=500, res=120) # start export
   print(p)
   dev.off() 
   
   ## Remove the best AIC, rsq values and model fits before the start of next loop
-  # rm(list = ls(pattern = "^Baranyi"))
   rm(list = ls(pattern = "^Bar"))
-  # rm(list = ls(pattern = "^Logistic_"))
   rm(list = ls(pattern = "^Logis"))
-  # rm(list = ls(pattern = "^LogisA"))
-  # rm(list = ls(pattern = "^Gompertz_"))
-  # rm(list = ls(pattern = "^GompertzA"))
-  # rm(list = ls(pattern = "^Gomp_F"))
   rm(list = ls(pattern = "^Buch"))
-  # rm(list = ls(pattern = "^Buchanan"))
 }
+
+## NOT INCLUDING GOMPERTZ MODEL
+# The obtained AIC values do not reflect its actual fit on the graphs
+# For many of my data sets, gomp_AIC values were the lowest but the visual fits were very very poor!
 
 ## Export stats results
 write.csv(Stats50, "../data/logstats2.csv")
