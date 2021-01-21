@@ -1,7 +1,7 @@
 #__author__ = 'Billy Lam (ykl17@ic.ac.uk)'
 #__version__ = '3.6.3'
 
-## Model fitting using logged data ##
+######### Model fitting using logged data #########
 
 ## Load necessary packages ##
 library(ggplot2)
@@ -21,13 +21,9 @@ loglogistic_model <- function(N_0, N_max, r_max, t){
   return(log((N_0 * N_max * exp(r_max*t)) / (N_max + N_0 * (exp(r_max*t) - 1))))
 }
 
-# exp_gompertz_model <- function(t, r_max, N_max, N_0, t_lag){ # Modified gompertz growth model (Zwietering 1990)
-#   return(exp(N_0 + (N_max - N_0) * exp(-exp(r_max * exp(1) * (t_lag - t)/((N_max - N_0) * log(10)) + 1))))
-# }  
-
-gompertz_model <- function(t, r_max, N_max, N_0, t_lag){ 
-  return(N_0 + (N_max - N_0) * exp(-exp(r_max * exp(1) * (t_lag - t)/((N_max - N_0) * log(10)) + 1)))
-}     
+# gompertz_model <- function(t, r_max, N_max, N_0, t_lag){ 
+#   return(N_0 + (N_max - N_0) * exp(-exp(r_max * exp(1) * (t_lag - t)/((N_max - N_0) * log(10)) + 1)))
+# }     
 
 baranyi_model <- function(N_0, N_max, r_max, t, t_lag){ 
   return(N_max + log10((-1+exp(r_max*t_lag) + exp(r_max*t))/(exp(r_max*t) - 1 + exp(r_max*t_lag) * 10^(N_max-N_0))))
@@ -219,7 +215,6 @@ for (i in unique(data$id2)){
     
     
     # If the newly sampled value has a better AIC and rsq values, replace
-    # if (BaranyiAIC2 != "NA" && BaranyiAIC == "NA"){
     if (exists("BaranyiAIC") == TRUE && exists("Baranyi_rsq") == TRUE){
       if (BaranyiAIC2 < BaranyiAIC){
         BaranyiAIC <- BaranyiAIC2
@@ -227,7 +222,7 @@ for (i in unique(data$id2)){
         Bar_Fit_final <- Bar_Fit
       }
     }
-    # }
+
     
     # Buchnan
     Buch_Fit <- try(nlsLM(logpop1 ~ buchanan_model(N_0, N_max, r_max, t = Time, 
@@ -354,7 +349,7 @@ for (i in unique(data$id2)){
     theme(plot.title = element_text(size = 16, face = "bold"))
 
   ## Save plot in results
-  png(paste("../data/", i, ".png", sep = ""), width=600, height=500, res=120) # start export
+  png(paste("../results/", "Sampling", i, ".png", sep = ""), width=600, height=500, res=120) # start export
   print(p)
   dev.off() 
   
@@ -369,4 +364,4 @@ for (i in unique(data$id2)){
 # For many of my data sets, gomp_AIC values were the lowest but the visual fits were very very poor!
 
 ## Export stats results
-write.csv(Stats50, "../data/logstats2.csv")
+write.csv(Stats50, "../results/logstats_sampling.csv")

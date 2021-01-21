@@ -21,24 +21,20 @@ loglogistic_model <- function(N_0, N_max, r_max, t){
   return(log((N_0 * N_max * exp(r_max*t)) / (N_max + N_0 * (exp(r_max*t) - 1))))
 }
 
-# gompertz_model <- function(t, r_max, N_max, N_0, t_lag){ # Modified gompertz growth model (Zwietering 1990)
-#   return(exp(N_0 + (N_max - N_0) * exp(-exp(r_max * exp(1) * (t_lag - t)/((N_max - N_0) * log(10)) + 1))))
-# }  
-
-gompertz_model <- function(t, r_max, N_max, N_0, t_lag){ # Modified gompertz growth model (Zwietering 1990)
-  return(N_0 + (N_max - N_0) * exp(-exp(r_max * exp(1) * (t_lag - t)/((N_max - N_0) * log(10)) + 1)))
-}     
-
 baranyi_model <- function(N_0, N_max, r_max, t, t_lag){ # Baranyi model (Baranyi 1993)
   return(N_max + log10((-1+exp(r_max*t_lag) + exp(r_max*t))/(exp(r_max*t) - 1 + exp(r_max*t_lag) * 10^(N_max-N_0))))
 }
 
+buchanan_model <- function(t, r_max, N_max, N_0, t_lag){ 
+  return(N_0 + (t >= t_lag) * (t <= (t_lag + (N_max - N_0) * log(10)/r_max)) * r_max * (t - t_lag)/log(10) + (t >= t_lag) * (t > (t_lag + (N_max - N_0) * log(10)/r_max)) * (N_max - N_0))
+}
+
 ## Initialize the results data frame ##
-Stats50 <- data.frame(ID = character(), Quadratic_AIC = numeric(), 
+Stats25 <- data.frame(ID = character(), Quadratic_AIC = numeric(), 
                      Cubic_AIC = numeric(), Logistic_AIC = numeric(), 
-                     Gompertz_AIC = numeric(), Baranyi_AIC = numeric(), 
+                     Buchanan_AIC = numeric(), Baranyi_AIC = numeric(), 
                      Quadratic_rsq = numeric(), Cubic_rsq = numeric(), 
-                     Logistic_rsq = numeric(), Gompertz_rsq = numeric(),
+                     Logistic_rsq = numeric(), Buchanan_rsq = numeric(),
                      Baranyi_rsq = numeric(), stringsAsFactors = FALSE)
 
 
@@ -79,11 +75,6 @@ for (i in unique(data$id2)){
   y_int <- as.numeric(y_int)
   t_lag_start <- (-y_int) / r_max_start # t_lag = x-intercept of the r_max tangent, so this calculates it
   
-  set.seed(55)
-  
-  for (j in 1:100){
-    
-  }
   
   ################ Fitting the models ##################
   ID <- supb$id2[i] #Getting the unique ID for each data set
@@ -101,7 +92,7 @@ for (i in unique(data$id2)){
   
   ## Non-linear ##
   # Logistic
-  Logis_Fit <- try(nlsLM(logpop1 ~ logistic_model(N_0, N_max, r_max, t = Time), 
+  Logis_Fit <- try(nlsLM(logpop1 ~ loglogistic_model(N_0, N_max, r_max, t = Time), 
                          data = supb, start = c(N_0 = N_0_start, 
                                                 N_max = N_max_start, 
                                                 r_max = r_max_start), 
@@ -116,20 +107,20 @@ for (i in unique(data$id2)){
     Logistic_rsq <- "NA"
   }
   
-  # Gompertz
-  Gomp_Fit <- try(nlsLM(logpop1 ~ gompertz_model(N_0, N_max, r_max, t = Time, 
+  # Buchanan
+  Buch_Fit <- try(nlsLM(logpop1 ~ buchanan_model(N_0, N_max, r_max, t = Time, 
                                                 t_lag), data = supb, 
                         start = c(N_0 = N_0_start, N_max = N_max_start, 
                                   r_max = r_max_start, t_lag = t_lag_start), 
                         control = nls.lm.control(maxiter = 100)), silent = T) 
-  if (class(Gomp_Fit) != 'try-error'){
-    GompertzAIC <- AIC(Gomp_Fit)
-    Gompertz_rss <- sum(residuals(Gomp_Fit)^2)
-    Gompertz_tss <- sum((supb$logpop1 - mean(supb$logpop1))^2)
-    Gompertz_rsq <- 1 - (Gompertz_rss/Gompertz_tss)
+  if (class(Buch_Fit) != 'try-error'){
+    BuchananAIC <- AIC(Buch_Fit)
+    Buchanan_rss <- sum(residuals(Buch_Fit)^2)
+    Buchanan_tss <- sum((supb$logpop1 - mean(supb$logpop1))^2)
+    Buchanan_rsq <- 1 - (Buchanan_rss/Buchanan_tss)
   } else {
-    GompertzAIC <- "NA"
-    Gompertz_rsq <- "NA"
+    BuchananAIC <- "NA"
+    Buchanan_rsq <- "NA"
   }
   
   # Baranyi
@@ -149,9 +140,9 @@ for (i in unique(data$id2)){
   }    
   
   # Filling in the results data frame with calculated AIC and adj r-squared values
-  whtev <- c(ID, QuaAIC, CubAIC, LogisAIC, GompertzAIC, BaranyiAIC, Qua_rsq, 
-             Cub_rsq, Logistic_rsq, Gompertz_rsq, Baranyi_rsq)
-  Stats50[i, ] <- whtev
+  whtev <- c(ID, QuaAIC, CubAIC, LogisAIC, BuchananAIC, BaranyiAIC, Qua_rsq, 
+             Cub_rsq, Logistic_rsq, Buchanan_rsq, Baranyi_rsq)
+  Stats25[i, ] <- whtev
   
   
   ################## Creating the plots #####################
@@ -173,16 +164,16 @@ for (i in unique(data$id2)){
     dfp <- rbind(dfp, df2) # rbind the dataframes
   }
   if(LogisAIC != "NA" && is.infinite(LogisAIC) == FALSE){
-    Lp <- logistic_model(t = length, r_max = coef(Logis_Fit)["r_max"], N_max = coef(Logis_Fit)["N_max"], N_0 = coef(Logis_Fit)["N_0"])
+    Lp <- loglogistic_model(t = length, r_max = coef(Logis_Fit)["r_max"], N_max = coef(Logis_Fit)["N_max"], N_0 = coef(Logis_Fit)["N_0"])
     df3 <- data.frame(length, Lp)
     df3$Model <- "Logistic"
     names(df3) <- c("length", "PopBio_pred", "Model")
     dfp <- rbind(dfp, df3)
   }
-  if(GompertzAIC != "NA" && is.infinite(GompertzAIC) == FALSE){
-    Gop <- gompertz_model(t = length, r_max = coef(Gomp_Fit)["r_max"], N_max = coef(Gomp_Fit)["N_max"], N_0 = coef(Gomp_Fit)["N_0"], t_lag = coef(Gomp_Fit)["t_lag"])
+  if(BuchananAIC != "NA" && is.infinite(BuchananAIC) == FALSE){
+    Gop <- buchanan_model(t = length, r_max = coef(Buch_Fit)["r_max"], N_max = coef(Buch_Fit)["N_max"], N_0 = coef(Buch_Fit)["N_0"], t_lag = coef(Buch_Fit)["t_lag"])
     df4 <- data.frame(length, Gop)
-    df4$Model <- "Gompertz"
+    df4$Model <- "Buchanan"
     names(df4) <- c("length", "PopBio_pred", "Model")
     dfp <- rbind(dfp, df4)
   }
@@ -202,13 +193,14 @@ for (i in unique(data$id2)){
     scale_color_manual(values = c("#E69F00", "#009E73", "#D55E00", "#56B4E9", "#F0E442")) +
     theme_bw() + # Black and white background
     theme(aspect.ratio = 1) + # Square background
-    labs(title = paste(ID), x = ("Time (hrs)"), y = paste("log(Population) ", supb$PopBio_units[i], sep = ""))
+    labs(title = paste("ID number:", ID), x = ("Time (hrs)"), y = paste("log(Population) ", supb$PopBio_units[i], sep = "")) +
+    theme(plot.title = element_text(size = 16, face = "bold"))
 
   ## Save plot in results
-  png(paste("../", i, ".png", sep = ""), width=600, height=500, res=120) # start export
+  png(paste("../results/", "Predict", i, ".png", sep = ""), width=600, height=500, res=120) # start export
   print(p)
   dev.off() # finish export
 }
 
 ## Export stats results
-write.csv(Stats50, "../data/logstats.csv")
+write.csv(Stats25, "../results/logstats_predict.csv")
