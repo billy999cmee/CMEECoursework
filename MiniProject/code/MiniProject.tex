@@ -1,0 +1,276 @@
+\documentclass[11pt, a4paper]{article} % A4 paper size, 11pt font size
+\usepackage[margin = 2cm]{geometry} 
+\usepackage[utf8]{inputenc} 
+\usepackage[T1]{fontenc}
+\usepackage{fouriernc} 
+\usepackage[strings]{underscore} 
+\usepackage{graphicx}
+\usepackage{sidecap} 
+\usepackage{lineno} 
+\renewcommand{\familydefault}{\sfdefault} 
+\usepackage{textcomp} 
+\usepackage{amsmath}
+\usepackage{graphicx}
+
+
+\title{Miniproject_writeup.tex}
+\author{yu.lam17 }
+\date{November 2020}
+
+\begin{document}
+
+\begin{titlepage} % Suppresses headers and footers on the title page
+
+	\centering 
+	
+	\vspace*{\baselineskip} 
+	
+	\rule{\textwidth}{1.6pt}\vspace*{-\baselineskip}\vspace*{2pt} % Thick line
+	\rule{\textwidth}{0.4pt} % Thin line
+	
+	\vspace{0.75\baselineskip} 
+	
+	{\huge The sampling effects on modelling and model selection between phenomenological and mechanistic models on
+	microbial growth data} % TITLE
+	
+	\vspace{0.75\baselineskip} 
+	
+	\rule{\textwidth}{0.4pt}\vspace*{-\baselineskip}\vspace{3.2pt} % Thin line
+	\rule{\textwidth}{1.6pt} % Thick line
+		
+	\vspace{2\baselineskip} % Whitespace after the title block
+	
+	{\LARGE Billy Lam} % 
+	\vspace*{0.75\baselineskip} 
+	
+	\Large 
+	MRes Computational Methods in Ecology and Evolution 
+	\vspace*{0.75\baselineskip} 
+	
+	5 - 12 - 2020
+	\vspace*{0.75\baselineskip} 
+
+	ykl17@ic.ac.uk
+	\vspace*{3\baselineskip} 
+	
+	Imperial College London
+	\vspace*{3\baselineskip} 
+    
+    Word count: 2776
+	
+\end{titlepage}
+
+\begin{center}
+    \Large
+    \begin{abstract}
+    Bacteria is a vital group to study and many have been using mathematical models in predicting bacterial growth. I have fitted linear and non-linear phenomenological and mechanistic models on 227 bacterial growth curves from 10 different publications. Model selection was addressed by comparing Akaike Information Criterion (AIC) between models. Furthermore, the sampling effects on model selection was examined. Out of a large variety of data sets, the Baranyi model was considered the "best" amongst the candidate models as it was capable of reflect data with two and three growth phases. Sampling only increased the chances of fit but not an escape of global optimum. Further investigations should incorporate the global optimization method to potentially obtain results at a global optimum.
+\end{abstract}
+\end{center}
+
+
+
+
+
+\newpage
+\section{Introduction}
+The "invisible" life form, bacteria, are prokaryotic microorganisms that have adapted to the majority of Earth's environments \cite{ovreaas2000population}. They are amongst the key forces in affecting life on Earth and are responsible for numerous roles such as the propelling of biogeochemical cycles and the safeguarding of the health of multicellular eukaryotes. Thus, making these microorganisms an extremely important group to study \cite{gibbons2015microbial, zaccaria2017modeling}.\\ %%%% watch out!
+
+\noindent In recent years, there has been an increasing interest in predicting bacterial growth with the utilization of mathematical models. Mathematical models are accurate representations of the core complex Biological systems with simplified approximations, they allow the prediction of a system's behaviour under a new external condition. These models can be divided into two discrete categories, phenomenological and mechanistic models. Phenomenological models permit the descriptions of an observed biological phenomena, whilst mechanistic models describe and provide insights into the reasons behind a biological phenomena \cite{transtrum2016bridging}. One of the main challenges in modelling a dynamic system is the parameter estimation problem, inaccurate parameter estimations could result in poor model fits or even unsuccessful convergence \cite{gabor2015robust}. Here, I have investigated the effects of sampling starting values compared to only predicting starting values. Furthermore, I have explored the implementation of both model types on bacterial population growth data and concluded which types of models are better fits for describing microbial growths.
+
+%Here, I have investigated the implementation of both model types on bacterial population growth data and concluded which types of models are better fits for describing microbial growths. Furthermore, the effects of sampling starting values compared to predicting starting values was explored.
+
+
+
+\section{Methods}
+\subsection{Data}
+The microbial population data were obtained from 10 separate publications. Each study differed in the bacterial species, strains, external growing conditions and the methods in determining bacterial populations. The whole data set was cleaned, wrangled and log transformed before any data divergences took place, special characters in character strings were transformed into blank spaces to prevent printing errors. Additionally, negative population values were removed as they only appeared in optical density readings, which indicates the usage of dirty cuvettes during the calibration process. Subsequently, the data set was divided into 227 individual subsets based on the the bacterial species, temperature, media exposed to the population and the data source. The explanatory variable was time in hours and the dependent variable was population size. Although the dependent variable was recorded in four different units, they were not standardised as the main focus of this study was the shape of the curves.  Besides, the units were identical within each subset.
+
+
+
+\subsection{Mathematical models}
+A total of 5 models were assessed, 2 of which were phenomenological models that were linear polynomials (quadratic and cubic), whereas the other 3 were non-linear mechanistic models. The first non-linear model used was the logistic model, the model assumes bacterial populations to instantaneously start growing exponentially after lag phase and the growth rates will gradually decrease until it reaches the stationary phase \cite{safuan2015mathematical}. The \textbf{logistic} model can be described with the following equation:
+
+\begin{equation}
+N_t = \frac{N_0 * N_{max} * e^{r_{max} * t}} {N_{max} + N_0 * (e^{r_{max} * t} - 1)}
+\end{equation}
+
+Where $N_t$ is the population size at time t, $N_0$ is the initial population size, $N_{max}$ is the maximum population biomass and $r_{max}$ is the maximum growth rate. The log of logistic model was used for model fitting as the population data sets were transformed into logarithmic space.\\
+
+\noindent The second mechanistic model was the Buchanan model. This simple model was originally derived to evaluate how well it matches up to Gompertz and Baranyi models in describing bacterial growth curves. It is also known as the three phase linear model, as it divides a standard bacterial growth curve into lag, exponential and stationary phases. The model expresses the lag and stationary phases to display zero net growth while the exponential growth phase displays logarithmic populations to increase linearly with time \cite{buchanan1997simple}.
+
+\begin{equation}
+N(t)=\left\{\begin{matrix}
+N_0 & if  t\leq t_{lag} \\ N_{max} + r_{max}\cdot (t-t_{lag})
+ & if t_{lag} < t < t_{max} \\N_{max}
+ & if t\geq t_{max} 
+\end{matrix}\right.
+\end{equation}
+
+Where $N_t$ is the population size at time t, $N_{max}$ is the maximum population size, $N_0$ is the initial population size, $t_{lag}$ is the time period of the lag phase and $r_{max}$ is the maximum growth rate. \\
+
+%\noindent The second non-linear model was the modified Gompertz model, it is a popular model which was discovered to be capable of fitting in a wide range of data. It is able to delineate a sigmoidal curve with gradual transitions from the lag phase to the exponential phase and to the stationary phase \cite{peleg2011microbial}. The modified \textbf{Gompertz} model can be described with the following equation:
+
+%\begin{equation}
+%log(N_t) = N_0 + (N_{max} - N_0) * e^{-e^{N_{max}*exp(1)}* \frac{t_{lag}^{-t}}{(N_{max} - N_0) * %log(10)}+1}
+%\end{equation}
+
+
+\noindent The third non-linear mechanistic model used was the Baranyi model, unlike the logistic model, it was originally developed for modelling bacterial growth and is capable of capturing population growth in time-varying environmental conditions \cite{grijspeerdt1999estimating}.  The \textbf{Baranyi} model can be described with the following equation:
+
+\begin{equation}
+log(N_t) = N_{max} + log(\frac{-1 + e^{r_{max} * t_{lag} + e^{r_{max} * t}}}{e^{r_{max} * t} - 1 + e^{r_{max} * t_{lag}} * 10^{n_{max} - N_0}})
+\end{equation}
+
+Where $N_t$ is the population size at time t, $N_0$ is the initial population size, $N_{max}$ is the maximum population size, $r_{max}$ is the maximum growth rate and $t_{lag}$ is the time period of the lag phase. 
+
+\subsection{Model fitting}
+In general, the workflow can be categorized into two modules with the intend to elucidate the effects of sampling. The data and results for both modules were prepared and analysed in the same manner, the only difference between the two was the presence of sampling around predicted starting values for model fitting.\\
+
+\noindent Before the commence of model fitting, the starting values for each parameter were estimated for each subset. The maximum growth rate ($r_{max}$) was calculated through recursive calculations of the slope with linear regression through every three adjacent data points while ignoring the presence of duplicated time points. The steepest slope would be regarded as the $r_{max}$ and the $t_{lag}$ was recognized as the x-intercept of the slope. Data sets with fewer than 4 data points were excluded as the fitting of mechanistic models requisite more data points than the model parameters and the random number generator seed was set to ensure reproducibility.\\
+
+\noindent Subsequently, the estimated values were randomly sampled a hundred times over the parameter space under a normal distribution with a standard deviation of 0.2. Rather than solely depending on one predicted value for each parameter, this approach elevates the chance of obtaining a fit at the cost of some biological meaning and a low possibility to escape a local optimum.\\
+
+\noindent Lastly, for each fitted model, the Akaike Information Criterion (AIC) was calculated and employed as the primary factor in determining the best candidate model. Thereafter, the r-squared values, AIC and their corresponding data ID were stored and exported into a comma separated value file.
+
+\subsection{Model analysis}
+For each individual subset, a graph was plotted consisting of the predicted lines from successfully converged models, afterwards, model analyses were carried out using the exported results csv file. The percentages of the number of subsets each model was able to fit were calculated and most importantly, the "optimal" model for each subset was selected based on their achieved AIC scores, with the lowest AIC value determined as the best AIC. However, as AIC scores represent relative support in the data subset of interest between models, there might exist models with AIC scores especially close to the best AIC value. Therefore, we included models that have AIC values with no less than a difference of 2 compared to the best AIC value, this signifies that there could be more than one "optimal" model for each individual subset \cite{burnham2004multimodel}. In addition, Kruskal-Wallis H test was performed on the AIC values for each model between module 1 and 2 as the data was not assumed to be normally-distributed.
+
+\subsection{Computing tools}
+R (version 3.6.3) was responsible for data cleaning, wrangling, model fitting and analysis using packages "dplyr" (data cleaning and wrangling), "minpack.lm" (model fitting) and "ggplot2" (graphs plotting). R was selected as the main computing tool because of its major convenience in data wrangling and statistical analyses. Moreover, there exist numerous packages for predicting starting parameters and nlls fitting in R, which ascertained my decision to use R for model fitting. Python 3 was used for writing the pipeline of the overall workflow with the package "subprocess" and Bash was used for writing and the compilation of this Latex report. 
+
+\section{Results}
+
+
+%%%%%%%%%%%% Table 1 %%%%%%%%%%%%
+\begin{table}[h]
+    \centering
+     \begin{tabular}{||c c c c||} 
+     \hline
+     Models & Convergence success (\%) & AIC & R-Squared\\ [0.5ex] 
+     \hline\hline
+     Quadratic & 100 & 47 & 10\\ 
+     \hline
+     Cubic & 97 & 128 & 52\\
+     \hline
+     Logistic & 97 & 65 & 37\\
+     \hline
+     Buchanan & 30 & 39 & 27\\
+     \hline
+     Baranyi & 63 & 99 & 101\\ [1ex] 
+     \hline
+    \end{tabular}
+    \caption{Illustrates the percentage of convergence success, total number of best AIC scores and R-squared values for only predicting starting parameters (module 1)}
+    \label{tab:my_label}
+\end{table}
+
+%%%%%%%%%%%% Table 2 %%%%%%%%%%%%
+\begin{table}[h]
+    \centering
+     \begin{tabular}{||c c c c||} 
+     \hline
+     Models & Convergence success (\%) & AIC & R-Squared\\ [0.5ex] 
+     \hline\hline
+     Quadratic & 100 & 28 & 2\\ 
+     \hline
+     Cubic & 97 & 92 & 26\\
+     \hline
+     Logistic & 100 & 51 & 48\\
+     \hline
+     Buchanan & 66 & 56 & 27\\
+     \hline
+     Baranyi & 99 & 150 & 124\\ [1ex] 
+     \hline
+    \end{tabular}
+    \caption{Illustrates the percentage of convergence success, total number of best AIC scores and R-squared values for sampling starting parameters (module 2)}
+    \label{tab:my_label}
+\end{table}
+
+\noindent Tab 1 and 2 illustrate the overall model fit results for both modules, consisting of convergence success percentages, number of "best-fits" models based on AIC and delta AIC scores and the total number of highest $R^2$ values. Amongst both modules, there were 150 data sets with two "optimal" models. \\
+
+\noindent The convergence success in both modules exhibited a consistently high percentage for quadratic, cubic and logistic models. The $R^2$ values in module 1 (predicting starting parameters) indicated Baranyi model with an outstanding number of good fit measures to the data, whereas AIC scores denoted cubic to be the "optimal" model, followed by Baranyi, then logistics model. On the contrary, the convergence success for Buchanan and Baranyi in module 2 (sampling starting parameters) displayed a 30\% increase compared to module 1. In addition, both $R^2$ and AIC values signified Baranyi model to be the most successful across the 227 unique data sets.\\
+
+\newpage
+
+%%%%%%%%%%%% Figure 1 %%%%%%%%%%%%
+\begin{figure}[t!]
+    \centering
+    \includegraphics[width=.9\textwidth]{../results/AICcompare.pdf}
+    \caption{Bar chart showing the AIC model selection results for each model on individual unique data sets between two modules, Kruskal-Wallis H test: $X^2$ = 4, df = 4, p-value = 0.41}
+    \label{Figure_1}
+\end{figure}
+
+\noindent From Fig 1, large variations in AIC scores between each model could be noticed. However, the AIC scores between the two modules were very similar except for Baranyi and cubic models. Kruskal-Wallis H test was performed between the two modules and the observed differences was not statistically different. In general, both cubic and Baranyi models were the most successful for both modules, with Baranyi selected as the "optimal" model for 150 data sets in module 2 and cubic selected as the "optimal" model for 128 data sets in module 1.
+
+%From Fig 1, mechanistic models are observed to have better fits than phenomenological models, with quadratic and cubic models displaying the lowest number of best fits. In comparison, the modified Gompertz model exhibited an outstanding number of best fits amongst the counts of all 5 models. 
+
+\newpage
+
+%%%%%%%%%%%% Figure 2 and 3 %%%%%%%%%%%%
+\begin{figure}[!tbp]
+  \centering
+  \begin{minipage}[b]{0.45\textwidth}
+    \includegraphics[width=\textwidth]{../results/Sampling27.png}
+    \caption{Growth curve of module 2, ID:27, \textit{C. michiganensis} at 25 degrees in TSB}
+  \end{minipage}
+  \hfill
+  \begin{minipage}[b]{0.45\textwidth}
+    \includegraphics[width=\textwidth]{../results/Sampling58.png}
+    \caption{Growth curve of module 2, ID:58,\textit{Staphylococcus species} at 7 degrees in salted chicken breast}
+  \end{minipage}
+\end{figure}
+
+%%%% Table 3 of Kruskal-Wallis H test results %%%%
+% No significance
+\begin{table}[!hb]
+    \centering
+     \begin{tabular}{||c c c c||} 
+     \hline
+     Models & Chi-squared & df & p-value\\ [0.5ex] 
+     \hline\hline
+     Quadratic & 226 & 226 & 0.49\\ 
+     \hline
+     Cubic & 220 & 220 & 0.49\\
+     \hline
+     Logistic & 219 & 219 & 0.49\\
+     \hline
+     Buchanan & 67 & 67 & 0.48\\
+     \hline
+     Baranyi & 143 & 143 & 0.48\\ [1ex] 
+     \hline
+    \end{tabular}
+    \caption{Illustrates the Kruskal-Wallis H test between module 1 and 2 for each model, none displayed any significant differences}
+    \label{tab:my_label}
+\end{table}
+
+\noindent Both Fig 2 and 3 are growth curves in module 2 of different combinations of species, temperatures and mediums. Tab 3 displays the results of Kruskal-Wallis H test between module 1 and 2 for AIC scores, all figures and tables will be focused upon in later discussions.
+
+\newpage
+
+\section{Discussion}
+In this report, a total of 5 models were strove onto 227 unique ID data sets with different combinations of species, strains, temperatures and mediums. While all the incorporated models attempted to describe the given data sets with some biological inferences, there needs to be a way to distinguish an "optimal" model amongst the competing candidates. Johnson and Omland (2004) described two approaches to achieve this purpose, which is the null hypothesis testing and model selection. Null hypothesis testing requires a hypothesis with little biological meaning (null) and an alternative hypothesis to be devised. Next, the null hypothesis is tested against a data set and if the null hypothesis is not shown to reflect the relationship in the data and has a p-value greater than an arbitrary threshold (0.05), it is rejected and the alternative hypothesis will be accepted. Traditionally, null hypothesis testing was utilized by many to compare two hypotheses and draw conclusions from biological systems. At present, model selection has replaced such method as it allows the comparisons between multiple models by directly weighting their relative support against each other. This likelihood-based method provides a more robust and logical way of choosing an "optimal" model than a statistical approach that accepts a hypothesis by rejecting a null hypothesis against an arbitrary value \cite{johnson2004model}.\\
+
+\noindent Undoubtedly, the simplest models: linear, quadratic and cubic models have one of the highest convergence successes amongst the candidates. Quadratic was able to fit all the data sets, as a parabolic curve allows fitting to data with only had two phases of a typical growth curve. Our data encompassed several scenarios in an experiment that could explain the data sets without a discernible lag phase or stationary phase. Firstly, a lag phase might not be detected under experiments utilizing certain strains/species in their favourable environments, which could cause high transcription and translation rates. Secondly, experiments with large recording intervals would neglect population changes in between each interval. Lastly, experiments with a short run time could terminate before a stationary phase was detected. Additionally, there were several data sets that only consisted of a few data points and were in a straight line. These scenarios would also explain why the convergence success was relatively low for the two mechanistic models, Buchanan and Baranyi, as both models were expected to fit onto data with three phases.\\
+
+\noindent Two statistical measures ($R^2$, AIC) were implemented onto our model fits and Kruskals-Wallis H tests were applied to test for the differences between AIC of both modules. Although $R^2$ values can suggest a good measure of fit by showing how close the regression line fits the observed data, there exists a major limitation within R-squared values for model selection. That is $R^2$ overlooks the principle of parsimony, it maximizes fit and will always favour complex models \cite{johnson2004model}. Therefore, we cannot draw inferences that Baranyi is the "optimal" model evidenced by Tab 1 and 2 as Baranyi has 4 parameters. Besides, AIC is the most appropriate approach and was used to address model selection and evaluation. We chose to prioritise AIC over BIC in this report due to several reasons. BIC assumes a "true model" within our set of candidate models. In reality, a "true model" never exists within our candidates as most of us believe that most statistical models are wrong. A "true model" will have to account for every single component of the system of interest, which will consequently result in a very complicated and overparameterized model. A good model should not disregard the principle of parsimony, yet be able to capture the essence of Biological processes within the system \cite{burnham2004multimodel, chatfield1995model}. Moreover, AIC was discovered to outperform BIC with small sample sizes and sparse data \cite{kuha2004aic}.\\
+
+\noindent Unsurprisingly, the cubic and Baranyi models were deemed the best candidates by calculating AIC, as the first three phases of bacterial growth  (lag, growth and stationary) portrays a sigmoidal curve. Cubic performed better than other models in module 1, with 128 data sets of best AIC scores and was the second best model in module 2. One reason of why cubic outperformed quadratic, logistic and Buchanan models in both modules was possibly because of shape constraints. Quadratic, with a parabolic curve, would only capture data sets displaying two growth phases and struggle to fit a standard growth curve (Fig 3). Whilst, logistic and Buchanan models could only capture the first three phases of bacterial growth, but not the death phase. A cubic curve would be able to model the decline in population after the $N_{max}$ was achieved (Fig 2). \\
+
+\newpage
+
+\noindent Oddly enough, the cubic shape could also be the reason why Baranyi was chosen as the "best" candidate model in module 2, the sigmoidal shape would prevent cubic to properly fit data sets with only two phases. Conversely, Baranyi models are able to properly fit data sets with or without a lag phase, regardless of the incorporation of the $t_{lag}$ parameter into the model, which could be the main reason behind Baranyi model's performance. \\
+
+\noindent Also, despite the mechanistic logistic model having an extremely high convergence success, it had a low number of best AIC scores in both modules. Without the $t_{lag}$ parameter and the logging of the model, logistic could only model the exponential and stationary phases of a growth curve as the $t_{lag}$ shape straightened when logged, which would explain its poor fits in numerous data sets.\\
+
+\noindent With a focus on AIC for model selection, I have decided to test for statistical differences between the AIC obtained from modules 1 and 2. Table 3 shows the Kruskal-Wallis H test results between the two modules for each model. Unsurprisingly, none of the models displayed any significant differences. A significant difference would indicate the escape of a local optimum, but since we are comparing values acquired from sampling over a narrow range of parameter space, the possibility would be very low. As mentioned previously and by other authors, the main purpose of sampling was to increase convergence successes, thus allowing the extraction of information with some biological meaning \cite{gabor2015robust}. This would  explain the major difference between the results of two modules, that is the convergence success and AIC scores for the Baranyi model. In Tab 1, although Baranyi has the second highest AIC score, it only has a convergence success of 63\%, but with the effects of sampling increasing its convergence success, Baranyi displayed the highest AIC score in module 2 as it successfully fitted to almost every given data set. Thus, sampling allowed us to perceive the "optimal" model out of our candidate models as it increases convergence success.\\
+
+\noindent For future investigations, we could utilize the global optimization method with multiple starting local predictions to further increase our chances in obtaining a global optimum solution. Although this might hamper the efficiency/run time of the codes, it will definitely provide better model fits. \\
+
+\noindent To summarise, with a wide variety of data sets which exhibited different number of phases of a bacterial growth curve, the non-linear mechanistic Baranyi model was considered the "optimal" model out of all five candidates. This was evidenced by the calculated AIC scores in module 2 and can be explained as Baranyi model has a lower relative shape constraint, which resulted in better model fits. Additionally, sampling could elucidate the "best" model by increasing convergence successes in mechanistic models.
+
+\newpage
+
+\bibliographystyle{plain}
+\bibliography{Miniproject}
+
+
+\end{document}

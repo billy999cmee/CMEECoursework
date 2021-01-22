@@ -2,6 +2,8 @@
 #__version__ = '3.6.3'
 
 ######### Model fitting using logged data #########
+# SAMPLING #
+cat("Starting model fitting with sampling starting parameters, this will take even longer!")
 
 ## Load necessary packages ##
 library(ggplot2)
@@ -345,7 +347,7 @@ for (i in unique(data$id2)){
     scale_color_manual(values = c("#E69F00", "#009E73", "#D55E00", "#56B4E9", "#F0E442")) +
     theme_bw() + 
     theme(aspect.ratio = 1) + 
-    labs(title = paste("ID number:", ID), x = ("Time (hrs)"), y = paste("log(Population) ", supb$PopBio_units[i], sep = "")) +
+    labs(title = paste("ID number:", ID), x = ("Time (hrs)"), y = paste("log(Population) ", supb$PopBio_units[1], sep = "")) +
     theme(plot.title = element_text(size = 16, face = "bold"))
 
   ## Save plot in results

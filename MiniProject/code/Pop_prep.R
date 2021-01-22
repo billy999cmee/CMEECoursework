@@ -2,6 +2,7 @@
 #__version__ = '3.6.3'
 
 #### Preparation script of the population dataset ####
+cat("Starting data preparation")
 
 ## Load package
 library(dplyr)
@@ -44,24 +45,6 @@ data$PopChange[which(data$PopBio_units=="OD_595")]<-data$PopChange[which(data$Po
 
 # Make a log PopBio and PopChange
 data$logpop1 <- log(data$PopBio + 1)
-data$logpop <- log(data$PopBio)
-data$logc <- log(data$PopChange)
-
-# Remove negative log values in logc due to 0.XX PopBio, otherwise NaNs will be produced
-data <- data[data$logc > 0, ]
-
-# logpop consists of tons of negative numbers, make a shift
-#data$logshift <- data$logpop + abs(min(data$logpop))
-
-# check any NAs/inf values in data frame
-# apply(data, 2, function(x) any(is.na(x) | is.infinite(x))) 
-
-# 
-# #Remove NAs and inf from log pop column
-# sum(is.infinite(data$logpop))
-# data2 <- na.omit(data)
-# df <- data2 %>% filter_all(all_vars(!is.infinite(.)))
 
 # Export dataframe to the date directory
 write.csv(data, "../data/Pop_clean.csv", row.names = F)
-

@@ -20,19 +20,19 @@ All of the data are obtained from:
 <br> Imagemagick
 <br> Latex
 
-<br> Week2:
+Week2:
 <br> csv package
 <br> sys module
 <br> doctest module
 
-<br> Week3:
+Week3:
 <br> tidyverse package
 <br> reshape2 package
 <br> ggplot2 package
 <br> maps package
 <br> rworldmap
 
-<br> Week7:
+Week7:
 <br> scipy module as sc
 <br> scipy.integrate sub-module as integrate
 <br> matplotlib.pylab sub-module as p
@@ -44,6 +44,16 @@ All of the data are obtained from:
 <br> cProfile module
 <br> timeit module
 <br> time module
+
+Miniproject:
+<br> R:
+<br> dplyr package
+<br> ggplot2 package
+<br> minpack.lm package
+<br> tidyr package
+<br> Python:
+<br> subprocess module
+
 
 **Installation:** 
 <u> Week1  
@@ -74,6 +84,12 @@ All of the data are obtained from:
 <br> run_LV.py: type "import cProfile" at the beginning of oyur python script
 <br> timeitme.py: type "import timeit" at the beginning of your python script
 <br> timeitme.py: type "import time" at the beginning of your python script
+
+<u> Minproject
+<br> Pop_prep.R: type "install.packages("dplyr")" at your R terminal if you haven't yet installed it and type "library(dplyr)" at the beginning of your R script
+<br> Pop_log_model.R, Pop_analysis.R, trial_log_fit.R: type "install.packages("ggplot2")" at your R terminal if you haven't yet installed it and type "library(ggplot2)" at the beginning of your R script
+<br> Pop_log_model.R, trial_log_fit.R: type "install.packages("minpack.lm")" at your R terminal if you haven't yet installed it and type "library(minpack.lm)" at the beginning of your R script
+<br> run_Miniproject.py: type "import subprocess" at the beginning of your python script
 
 **Project structure and Usage:**
 <br> There is a sub-directory for each week, within each of those sub-directories there is a standard structure of code, data, results and sandbox. The code directory contains all the codes, the data directory contains all the data downloaded for the practicals (see brief description section to obtain the data from the link), results will contain all the results generated from practicals and sandbox is a directory filled with many test files which will not be assessed on and will be git ignored. Sometimes, a sub-directory called writeup will appear in some of the weekly directories whhich will consist of Latex written work, pdf and png files.

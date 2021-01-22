@@ -1,11 +1,8 @@
 *~ 
 *.tmp
 *.png
-Week1/sandbox/
-Week2/sandbox/
-Week3/sandbox/
 .RData
 .Rhistory
 Week3/code/.RData
 Week3/code/.Rhistory
-Week7/sandbox/
+sandbox
