@@ -3,7 +3,7 @@
 
 **Brief description:**
 <br> This is a miniproject on linear and non-linear model fitting with the utilization of R, Python and Bash scripts. The general workflow of the miniproject includes, data cleaning and wrangling, model fitting and model analysis.
-<br> PLEASE run the script: run_Miniproject.sh for the streamline of project workflow
+<br> <b>Please</b> run the script: run_Miniproject.sh for the streamline of project workflow
 <br> Further instructions can be accessed through this link down below:
 <br> https://mhasoba.github.io/TheMulQuaBio/notebooks/Appendix-MiniProj.html
 
