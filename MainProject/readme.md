@@ -8,7 +8,7 @@ Data wrangling scripts include GISdataPrep.R, Wrangle.R and Wrangle2.R
 <br> Survival scripts include Survival.R and Survivalplots.R
 <br> Activity scripts include Spatiotemporal2Male.R, Spatiotemporal2Female.R and Spatiotemporal.R
 
-**General workflow:** GISdataPrep -> Wrangle -> Wrangle2 -> Survival -> Survivalplots -> Spatiotemporal2Male -> Spatiotemporal2Female -> Spatiotemporal
+**General workflow of R scripts:** GISdataPrep -> Wrangle -> Wrangle2 -> Survival -> Survivalplots -> Spatiotemporal2Male -> Spatiotemporal2Female -> Spatiotemporal
 
 
 **Language:**
