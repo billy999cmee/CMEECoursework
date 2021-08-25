@@ -5,8 +5,8 @@
 <br> This thesis is submitted for the partial fulfillment of the requirements for the degree of MRes in Computational Methods in Ecology and Evolution at Imperial Colleg London. It aims to infer the drivers of survival and spatiotemporal activity of wood mouse using 3 years of trapping and location data collected at Nash's Copse, Silwood Park campus. Data analysis is divided into two sections and involves both R and program MARK. 
 
 Data wrangling scripts include GISdataPrep.R, Wrangle.R and Wrangle2.R
-<br> Survival scripts include Survival.R and Survivalplots.R
-<br> Activity scripts include Spatiotemporal2Male.R, Spatiotemporal2Female.R and Spatiotemporal.R
+<br> Survival analysis scripts include Survival.R and Survivalplots.R
+<br> Activity analysis scripts include Spatiotemporal2Male.R, Spatiotemporal2Female.R and Spatiotemporal.R
 
 **General workflow of R scripts:** GISdataPrep -> Wrangle -> Wrangle2 -> Survival -> Survivalplots -> Spatiotemporal2Male -> Spatiotemporal2Female -> Spatiotemporal
 
