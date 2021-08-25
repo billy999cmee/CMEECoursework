@@ -2,13 +2,14 @@
 <br> Thesis title: Driver effects of survival and spatiotemporal activity of a woodland rodent
 
 **Brief description:**
-<br> This project analyses 3 years of trapping and location data of wood mouse collected at Silwood Park campus to infer the drivers of their survival and spatiotemporal activity
-<br> Data analysis involves both R version 4.1.0 and program MARK.
-<br> The general workflow of the R scripts is as follows: GISdataPrep -> Wrangle -> Wrangle2 -> Survival -> Survivalplots -> Spatiotemporal2Male -> Spatiotemporal2Female -> Spatiotemporal
-<br> Data wrangling scripts include GISdataPrep.R, Wrangle.R and Wrangle2.R
-<br> Data analysis is divided into two sections: Survival and Spatiotemporal
+<br> This thesis is submitted for the partial fulfillment of the requirements for the degree of MRes in Computational Methods in Ecology and Evolution at Imperial Colleg London. It aims to infer the drivers of survival and spatiotemporal activity of wood mouse using 3 years of trapping and location data collected at Nash's Copse, Silwood Park campus. Data analysis is divided into two sections and involves both R and program MARK. 
+
+Data wrangling scripts include GISdataPrep.R, Wrangle.R and Wrangle2.R
 <br> Survival scripts include Survival.R and Survivalplots.R
 <br> Activity scripts include Spatiotemporal2Male.R, Spatiotemporal2Female.R and Spatiotemporal.R
+
+**General workflow:** GISdataPrep -> Wrangle -> Wrangle2 -> Survival -> Survivalplots -> Spatiotemporal2Male -> Spatiotemporal2Female -> Spatiotemporal
+
 
 **Language:**
 <br> R (4.1.0)
