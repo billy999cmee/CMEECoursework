@@ -1,5 +1,5 @@
 **Project name / title:**
-<br> Thesis title: Driver effects of survival and spatiotemporal activity of a woodland rodent
+<br> Driver effects of survival and spatiotemporal activity of a woodland rodent
 
 **Brief description:**
 <br> This thesis is submitted for the partial fulfillment of the requirements for the degree of MRes in Computational Methods in Ecology and Evolution at Imperial Colleg London. It aims to infer the drivers of survival and spatiotemporal activity of wood mouse using 3 years of trapping and location data collected at Nash's Copse, Silwood Park campus. Data analysis is divided into two sections and involves both R and program MARK. 
