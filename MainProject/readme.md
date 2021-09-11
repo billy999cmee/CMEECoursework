@@ -9,9 +9,10 @@ Data wrangling scripts include GISdataPrep.R, Wrangle.R and Wrangle2.R
 <br> Activity analysis scripts include Spatiotemporal2Male.R, Spatiotemporal2Female.R and Spatiotemporal.R
 
 **General workflow of R scripts:** 
-GISdataPrep -> Wrangle -> Wrangle2 -> Survival -> Survivalplots -> Spatiotemporal2Male -> Spatiotemporal2Female -> Spatiotemporal
+<br> GISdataPrep -> Wrangle -> Wrangle2 -> Survival -> Survivalplots -> Spatiotemporal2Male -> Spatiotemporal2Female -> Spatiotemporal
 
-GISdataPrep.R reads all shapefiles, creates a map of the study site and matches trapping and data logger detection coordinates to particular habitat features
+**Description of R scripts:** 
+<br> GISdataPrep.R reads all shapefiles, creates a map of the study site and matches trapping and data logger detection coordinates to particular habitat features
 <br> Wrangle.R converts the data logger detection dataset to comprise of capture history, e.g. 100101101, and individual covariates
 <br> Wrangle2.R performs data wrangling and transform both trapping and data logger datasets to fit GLMMs
 <br> Survival.R performs survival analysis through accessing program MARK
