@@ -14,7 +14,7 @@ Data wrangling scripts include GISdataPrep.R, Wrangle.R and Wrangle2.R
 **Description of R scripts:** 
 <br> GISdataPrep.R reads all shapefiles, creates a map of the study site and matches trapping and data logger detection coordinates to particular habitat features
 <br> Wrangle.R converts the data logger detection dataset to comprise of capture history, e.g. 100101101, and individual covariates
-<br> Wrangle2.R performs data wrangling and transform both trapping and data logger datasets to fit GLMMs
+<br> Wrangle2.R performs data wrangling and transform both trapping and data logger datasets to fit GLMMs and CJS models
 <br> Survival.R performs survival analysis through accessing program MARK
 <br> Survivalplots.R plots all predicted survival graphs from selected models
 <br> Spatiotemporal2Male.R fis the male dataset to 4 GLMMs 
